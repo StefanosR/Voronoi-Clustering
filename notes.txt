@@ -2,10 +2,12 @@ Plan:
 
 1. Convert delaunay to 2d Voronoi:
 
-    for each triangle in triangulation // done inserting points, now clean up
-        if triangle contains a vertex from original super-triangle
-            remove triangle from triangulation
-    return triangulation
+        a)  for each triangle in triangulation // done inserting points, now clean up
+                if triangle contains a vertex from original super-triangle
+                    remove triangle from triangulation
+            return triangulation
+        b)
+        c)
 
 2. Create 3d Voronoi:
 
