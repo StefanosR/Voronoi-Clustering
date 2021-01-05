@@ -207,7 +207,7 @@ def calculateCircle(t):
 
 # Dataset point input
 
-filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi Clustering\Voronoi-Clustering\Ski_Areas_NA.csv' # The data can be manipulated manually to change the grid
+filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' # The data can be manipulated manually to change the grid
 
 points = []
 
