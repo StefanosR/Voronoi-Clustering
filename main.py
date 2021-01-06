@@ -139,7 +139,7 @@ def pointInsideCircumcircle(p, t):
         (cx_*cx_ + cy_*cy_) * (ax_*by_-bx_*ay_)
     ) > 0
 
-# Function 3: Can be used to connect the circumcenters of adjacent trigs
+# Function 3: Finds if a certain edge is shared with any triangle
 def isSharedEdge(edge, trigs):
     for t in trigs:
         for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
