@@ -68,7 +68,7 @@ class Circle:
         # Det = (x1-x2)*(y2-y3) - (x2-x3)*(y1-y2)
         det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1]) # or (p1[0] - p2[0]) * (p2[1] - p3[1]) - \ (p2[0] - p3[0]) * (p1[1] - p2[1])
         
-        if abs(det) < 1.0e-6: #if 3 points are aligned, there can't be triangle
+        if abs(det) < 1.0e-6: # if 3 points are aligned, there can't be triangle
             return False
 
         self.x = (bc*(p2[1] - p3[1]) - cd*(p1[1] - p2[1])) / det
@@ -142,7 +142,7 @@ def pointInsideCircumcircle(p, t):
 # Function 3: Can be used to connect the circumcenters of adjacent trigs
 def isSharedEdge(edge, trigs):
     for t in trigs:
-        for e in t.edges:  #check if the vertices of the inserted edge are same with those of the triangle
+        for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
             if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:  
                 return True
             elif e.points[0].x == edge.points[1].x and e.points[0].y == edge.points[1].y and e.points[1].x == edge.points[0].x and e.points[1].y == edge.points[0].y:
@@ -151,7 +151,7 @@ def isSharedEdge(edge, trigs):
     return False
 
 # Function 4:
-def isContainPointsFromTrig(t1, t2): #check if two trigs are sharing a node
+def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
@@ -205,8 +205,9 @@ def calculateCircle(t):
 
 # Dataset point input
 
-#filename = r'C:\Users\Στέφανος Ρήγας\Desktop\Fast Projects\Voronoi Projects\StefanosVoronoi\airports - 10.csv' # The data can be manipulated manually to change the grid
-filename = r'C:\Users\user\Downloads\airports_-_10.csv'
+# Copy path of Ski_Areas_NA.csv to paste below
+filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' # The data can be manipulated manually to change the grid
+
 points = []
 
 with open(filename, 'r', encoding='utf8') as csvfile:
@@ -214,6 +215,10 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         separated = line.split(',')
         # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
+        temp1 = float(separated[0])
+        temp2 = float(separated[1])
+        temp = [float(separated[0]), float(separated[1])]
+        '''
         try:
             temp1 = float(separated[6])
             temp2 = float(separated[7])
@@ -222,12 +227,11 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp1 = float(separated[7])
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
-        N = 10          # Number of points required for the plot/animation
+        '''
+        N = 100          # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
-        points.append(Point(temp1,temp2)) 
-
-#print(temp)
+        points.append(Point(temp1,temp2))
 
 # Manual user input:
 '''
@@ -262,12 +266,12 @@ def animate(i):
     p = points[i]
     bad_trigs = []
     for t in trigs:
-        if pointInsideCircumcircle(p, t):  #first find all the triangles that are no longer valid due to the insertion
+        if pointInsideCircumcircle(p, t):  # first find all the triangles that are no longer valid due to the insertion
             bad_trigs.append(t)
     poly = []
     for b_t in bad_trigs:
         for e in b_t.edges:
-            copied_bad_trigs = bad_trigs[:] #remove from bad_trigs the bad trig that we are investigating 
+            copied_bad_trigs = bad_trigs[:] # remove from bad_trigs the bad trig that we are investigating 
             copied_bad_trigs.remove(b_t)
             if not isSharedEdge(e, copied_bad_trigs):
                 poly.append(e)
@@ -276,7 +280,7 @@ def animate(i):
     for e in poly:
         T = createTrigFromEdgeAndPoint(e, p)
         trigs.append(T)
-    #Auto leipei kai isws ftaei poy den afaireitai to super trig
+    # Auto leipei kai isws ftaei poy den afaireitai to super trig
 #     for each triangle in triangulation // done inserting points, now clean up
 #       if triangle contains a vertex from original super-triangle
 #          remove triangle from triangulation
@@ -291,18 +295,19 @@ def animate(i):
     artists = []
     for t in trigs[:]:
         trig_artist = t.toArtist()
-        # artists.append(trig_artist)
+        artists.append(trig_artist)
         plt.gca().add_patch(trig_artist)
         c = Circle()
         c.fromTriangle(t)
         circ_artist = c.toArtist()
-         #artists.append(circ_artist)
-         #plt.gca().add_artist(circ_artist) # Circle drawing
+        #artists.append(circ_artist)
+        #plt.gca().add_artist(circ_artist) # Circle drawing
 
     return artists
 
+# ???
 fig = plt.figure()
-ax = fig.add_subplot(111, aspect='equal')
+# ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
 
 fanim = animation.FuncAnimation(
     fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
