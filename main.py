@@ -2,9 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# WRITE CORRECT STEP DESCRIPTION THAT COMPLIES WITH THE EXISTING FUNCTIONS
-
-# Info
+# Info 
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
@@ -16,9 +14,9 @@ import matplotlib.animation as animation
 # 6. Repeat until no more points can be added
 # 7. Remove all triangles that have a vertex from the super triangle
 
-# For transforming Delauney -> Voronoi:
+# For transforming Delauney -> Voronoi: (UPDATE HERE)
 # 1. Find all the circumcenters of the tringles
-# 2. Connect adjaisent triangle circumcenters with edge
+# 2. Connect adjacent triangle circumcenters with edge.
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -62,15 +60,15 @@ class Circle:
         p1 = [pnts[0].x, pnts[0].y]
         p2 = [pnts[1].x, pnts[1].y]
         p3 = [pnts[2].x, pnts[2].y]
-        # Maths
+        # Math
         temp = p2[0] * p2[0] + p2[1] * p2[1]                # (x2^2 + y2^2)
         bc = (p1[0] * p1[0] + p1[1] * p1[1] - temp) / 2     # (x1^2 + y1^2 - x2^2 + y2^2)/2
         cd = (temp - p3[0] * p3[0] - p3[1] * p3[1]) / 2     # ((x2^2 + y2^2) - x3^2 - y3^2)/2
 
         # Det = (x1-x2)*(y2-y3) - (x2-x3)*(y1-y2)
-        det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1])
+        det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1]) # or (p1[0] - p2[0]) * (p2[1] - p3[1]) - \ (p2[0] - p3[0]) * (p1[1] - p2[1])
         
-        if abs(det) < 1.0e-6:
+        if abs(det) < 1.0e-6: # if 3 points are aligned, there can't be triangle
             return False
 
         self.x = (bc*(p2[1] - p3[1]) - cd*(p1[1] - p2[1])) / det
@@ -92,7 +90,7 @@ def calculateSuperTriangle(points):
     p_max = Point(max(points, key=lambda p: p.x).x + 0.1,
                   max(points, key=lambda p: p.y).y + 0.1)
 
-    a = p_max.x - p_min.x
+    a = p_max.x - p_min.x  # "distance" between max and min points
     b = p_max.y - p_min.y
 
     p1 = Point(p_min.x, p_min.y)
@@ -141,11 +139,11 @@ def pointInsideCircumcircle(p, t):
         (cx_*cx_ + cy_*cy_) * (ax_*by_-bx_*ay_)
     ) > 0
 
-# Function 3:
+# Function 3: Can be used to connect the circumcenters of adjacent trigs
 def isSharedEdge(edge, trigs):
     for t in trigs:
-        for e in t.edges:
-            if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:
+        for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
+            if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:  
                 return True
             elif e.points[0].x == edge.points[1].x and e.points[0].y == edge.points[1].y and e.points[1].x == edge.points[0].x and e.points[1].y == edge.points[0].y:
                 return True
@@ -153,7 +151,7 @@ def isSharedEdge(edge, trigs):
     return False
 
 # Function 4:
-def isContainPointsFromTrig(t1, t2):
+def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
@@ -207,7 +205,8 @@ def calculateCircle(t):
 
 # Dataset point input
 
-filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' # The data can be manipulated manually to change the grid
+# Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
+filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' 
 
 points = []
 
@@ -229,7 +228,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 100          # Number of points required for the plot/animation
+        N = 100         # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
@@ -257,26 +256,22 @@ for p in points:
 super_trig = calculateSuperTriangle(points) 
 trigs = [super_trig]
 
-# Initialize grid and plot
-def init():
+def init(): # ??????
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
-    plt.xlabel('X coordinates')
-    plt.ylabel('Y coordinates')
-    plt.title('Delaunay Triangulation')
     return []
 
-# Animation
+# Animation, exactly as in Wiki
 def animate(i):
     p = points[i]
     bad_trigs = []
     for t in trigs:
-        if pointInsideCircumcircle(p, t):
+        if pointInsideCircumcircle(p, t):  # first find all the triangles that are no longer valid due to the insertion
             bad_trigs.append(t)
     poly = []
     for b_t in bad_trigs:
         for e in b_t.edges:
-            copied_bad_trigs = bad_trigs[:]
+            copied_bad_trigs = bad_trigs[:] # remove from bad_trigs the bad trig that we are investigating 
             copied_bad_trigs.remove(b_t)
             if not isSharedEdge(e, copied_bad_trigs):
                 poly.append(e)
@@ -285,6 +280,11 @@ def animate(i):
     for e in poly:
         T = createTrigFromEdgeAndPoint(e, p)
         trigs.append(T)
+    # Auto leipei kai isws ftaei poy den afaireitai to super trig
+    # for each triangle in triangulation // done inserting points, now clean up
+    #   if triangle contains a vertex from original super-triangle
+    #       remove triangle from triangulation
+    # return triangulation
     plt.cla()
 
     # Draw points
@@ -293,34 +293,29 @@ def animate(i):
 
     # Draw triangles and circles (output can be manipulated from the comments)
     artists = []
-
     for t in trigs[:]:
         trig_artist = t.toArtist()
-        plt.xlabel('X coordinates')
-        plt.ylabel('Y coordinates')
-        plt.title('Delaunay Triangulation')
         artists.append(trig_artist)
         plt.gca().add_patch(trig_artist)
         c = Circle()
         c.fromTriangle(t)
         circ_artist = c.toArtist()
-        # artists.append(circ_artist)
-        # plt.gca().add_artist(circ_artist) # Circle drawing
-    return artists
+        #artists.append(circ_artist)
+        #plt.gca().add_artist(circ_artist) # Circle drawing
 
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    return artists
 
 # ???
 fig = plt.figure()
-# ax = fig.add_subplot(111, aspect='equal')
+# ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
 
 fanim = animation.FuncAnimation(
-fig, animate, init_func=init, frames = N + 3, interval=100, blit=True)
+    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
 # Saves the results in gif:
 
 # fanim.save('triangulation.gif', writer='pillow') 
 
-# Outputs the results in a window:
+# Outputs the results in a window
 
 plt.show()
