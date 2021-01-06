@@ -31,5 +31,3 @@ Stefanos ->
 Kostas ->
 
 New meeting:
-
-test to see if everything in vs code and github works
