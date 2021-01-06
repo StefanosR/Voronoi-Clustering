@@ -14,7 +14,7 @@ import matplotlib.animation as animation
 # 6. Repeat until no more points can be added
 # 7. Remove all triangles that have a vertex from the super triangle
 
-# For transforming Delauney -> Voronoi:
+# For transforming Delauney -> Voronoi: (UPDATE HERE)
 # 1. Find all the circumcenters of the tringles
 # 2. Connect adjacent triangle circumcenters with edge.
 
@@ -205,8 +205,8 @@ def calculateCircle(t):
 
 # Dataset point input
 
-# Copy path of Ski_Areas_NA.csv to paste below
-filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' # The data can be manipulated manually to change the grid
+# Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
+filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' 
 
 points = []
 
@@ -228,7 +228,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 100          # Number of points required for the plot/animation
+        N = 100         # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
@@ -256,7 +256,7 @@ for p in points:
 super_trig = calculateSuperTriangle(points) 
 trigs = [super_trig]
 
-def init(): #??????
+def init(): # ??????
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
     return []
@@ -281,10 +281,10 @@ def animate(i):
         T = createTrigFromEdgeAndPoint(e, p)
         trigs.append(T)
     # Auto leipei kai isws ftaei poy den afaireitai to super trig
-#     for each triangle in triangulation // done inserting points, now clean up
-#       if triangle contains a vertex from original super-triangle
-#          remove triangle from triangulation
-#    return triangulation
+    # for each triangle in triangulation // done inserting points, now clean up
+    #   if triangle contains a vertex from original super-triangle
+    #       remove triangle from triangulation
+    # return triangulation
     plt.cla()
 
     # Draw points
