@@ -281,9 +281,6 @@ def animate(i):
         T = createTrigFromEdgeAndPoint(e, p)
         trigs.append(T)
     # Auto leipei kai isws ftaei poy den afaireitai to super trig
-        for i in trigs:
-            if isContainPointsFromTrig(i, super_trig):
-                   trigs.remove(i)
     # for each triangle in triangulation // done inserting points, now clean up
     #   if triangle contains a vertex from original super-triangle
     #       remove triangle from triangulation
