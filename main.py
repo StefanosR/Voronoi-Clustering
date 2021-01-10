@@ -313,16 +313,16 @@ def animate(i):
         c = Circle()
         c.fromTriangle(t)
         circ_artist = c.toArtist()
-        # artists.append(circ_artist)
-        # plt.gca().add_artist(circ_artist) # Circle drawing
+        artists.append(circ_artist)
+        plt.gca().add_artist(circ_artist) # Circle drawing
     return artists
 
 # ???
 fig = plt.figure()
-# ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
+ax = fig.add_subplot(111, aspect='equal')
 
 fanim = animation.FuncAnimation(
-    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
+fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
 # Saves the results in gif:
 
