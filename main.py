@@ -1,3 +1,4 @@
+from sys import float_repr_style
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -42,7 +43,7 @@ class Triangle:
     # Triangle consists of 3 corners
     def points(self):
         return [self.edges[0].points[0], self.edges[1].points[0], self.edges[2].points[0]]
-    # Draw the triangle function
+    # Draw the triangle 
     def toArtist(self):
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), self.points())))
         return plt.Polygon(points[:3, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
@@ -156,7 +157,6 @@ def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
                 return True
-
     return False
 
 # Function 5:
@@ -201,12 +201,21 @@ def calculateCircle(t):
     radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
     return ((cx, cy), radius)
 
+# Function 8: Whether a triangle contains a vertex from original super-triangle
+def containsVertex(t1, t2):
+    for v1 in t1.points():
+        for v2 in t2.points():
+            if v1.x == v2.x and v1.y == v2.y:
+                print("It works")
+                return 0
+            break    
+        break
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' 
+filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA2.csv' 
 
 points = []
 
@@ -228,7 +237,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 100         # Number of points required for the plot/animation
+        N = 10         # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
@@ -254,6 +263,7 @@ for p in points:
 
 # Calculate SuperTriangle
 super_trig = calculateSuperTriangle(points) 
+
 trigs = [super_trig]
 
 def init(): # ??????
@@ -261,29 +271,30 @@ def init(): # ??????
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
     return []
 
-# Animation, exactly as in Wiki
+# Animation σύμφωνα με τον ψευδοκώδικα Wikipedia
 def animate(i):
     p = points[i]
+    # Λείπει μια for (περιττή?)
     bad_trigs = []
-    for t in trigs:
-        if pointInsideCircumcircle(p, t):  # first find all the triangles that are no longer valid due to the insertion
+    for t in trigs:                          # first find all the triangles that are no longer valid due to the insertion
+        if pointInsideCircumcircle(p, t):  
             bad_trigs.append(t)
     poly = []
-    for b_t in bad_trigs:
+    for b_t in bad_trigs:                    # find the boundary of the polygonal hole
         for e in b_t.edges:
-            copied_bad_trigs = bad_trigs[:] # remove from bad_trigs the bad trig that we are investigating 
+            copied_bad_trigs = bad_trigs[:]  # remove from bad_trigs the bad trig that we are investigating 
             copied_bad_trigs.remove(b_t)
             if not isSharedEdge(e, copied_bad_trigs):
                 poly.append(e)
     for b_t in bad_trigs:
-        trigs.remove(b_t)
+        trigs.remove(b_t)                    # remove them from the data structure
     for e in poly:
-        T = createTrigFromEdgeAndPoint(e, p)
+        T = createTrigFromEdgeAndPoint(e, p) # re-triangulate the polygonal hole
         trigs.append(T)
-    # Auto leipei kai isws ftaei poy den afaireitai to super trig
-    # for each triangle in triangulation // done inserting points, now clean up
-    #   if triangle contains a vertex from original super-triangle
-    #       remove triangle from triangulation
+    # Κομμάτι που έλειπε
+    for t in trigs:                          # for each triangle in triangulation // done inserting points, now clean up
+        if containsVertex(t, super_trig):    # if triangle contains a vertex from original super-triangle
+            trigs.remove(t)                  # remove triangle from triangulation
     # return triangulation
     plt.cla()
 
@@ -300,9 +311,8 @@ def animate(i):
         c = Circle()
         c.fromTriangle(t)
         circ_artist = c.toArtist()
-        #artists.append(circ_artist)
-        #plt.gca().add_artist(circ_artist) # Circle drawing
-
+        # artists.append(circ_artist)
+        # plt.gca().add_artist(circ_artist) # Circle drawing
     return artists
 
 # ???
