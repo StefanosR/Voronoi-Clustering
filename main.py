@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# Info 
+# Info -> Reminder to change opening comments
+
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
@@ -210,6 +211,7 @@ def containsVertex(t1, t2):
                 return 0
             break    
         break
+    
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
@@ -237,7 +239,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 10         # Number of points required for the plot/animation
+        N = 10          # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))

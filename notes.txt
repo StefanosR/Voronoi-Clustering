@@ -2,7 +2,7 @@ Plan:
 
 1. Convert delaunay to 2d Voronoi:
 
-        a)  Complete Delaunay triangulation
+        a)  Complete Delaunay triangulation // Not necessary
 
             for each triangle in triangulation // done inserting points, now clean up
                 if triangle contains a vertex from original super-triangle
@@ -16,9 +16,9 @@ Plan:
 
 2. Create 3d Voronoi:
 
-    a) Find a new dataset
-    b) 
-    c) 
+    a) Find a new dataset or convert existing dataset to 3d (by adding altitudes)
+    b) Check here: https://comserv.cs.ut.ee/home/files/taht_computerscience_2018.pdf?study=ATILoputoo&reference=2A17313BF1BBB5F745905EAE24D26F5A8BE54739
+    c) Κώδικας που αντιστοιχεί στο παραπάνω paper -> https://bitbucket.org/Marko_T/real-timecavedestructionusing3dvoronoi/src/master/
 
 3. Technical Report - Presentation
 
@@ -32,7 +32,7 @@ Tasks:
 
 Mitsakos -> 1.b
 Sfatidis -> 1.b
-Stefanos -> 1.a
+Stefanos -> 1.a + 3.a
 Kostas -> 1.a
 
 New meeting: 11-13/1 
