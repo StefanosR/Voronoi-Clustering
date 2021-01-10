@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# Info 
+# Info -> Reminder to change opening comments
+
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
@@ -140,7 +141,7 @@ def pointInsideCircumcircle(p, t):
         (cx_*cx_ + cy_*cy_) * (ax_*by_-bx_*ay_)
     ) > 0
 
-# Function 3: Can be used to connect the circumcenters of adjacent trigs
+# Function 3: Finds if a certain edge is shared with any triangle
 def isSharedEdge(edge, trigs):
     for t in trigs:
         for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
@@ -238,7 +239,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 10         # Number of points required for the plot/animation
+        N = 10          # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
