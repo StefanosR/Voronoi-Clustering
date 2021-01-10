@@ -202,12 +202,12 @@ def calculateCircle(t):
     return ((cx, cy), radius)
 
 # Function 8: Whether a triangle contains a vertex from original super-triangle
-def containsVertex(t, super_trig):
-    for v1 in t.points():
-        for v2 in super_trig.points():
+def containsVertex(t1, t2):
+    for v1 in t1.points():
+        for v2 in t2.points():
             if v1.x == v2.x and v1.y == v2.y:
                 print("It works")
-                return 1
+                return 0
             break    
         break
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -263,6 +263,7 @@ for p in points:
 
 # Calculate SuperTriangle
 super_trig = calculateSuperTriangle(points) 
+
 trigs = [super_trig]
 
 def init(): # ??????
@@ -310,9 +311,8 @@ def animate(i):
         c = Circle()
         c.fromTriangle(t)
         circ_artist = c.toArtist()
-        #artists.append(circ_artist)
-        #plt.gca().add_artist(circ_artist) # Circle drawing
-
+        # artists.append(circ_artist)
+        # plt.gca().add_artist(circ_artist) # Circle drawing
     return artists
 
 # ???
