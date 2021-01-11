@@ -150,10 +150,10 @@ def isSharedEdge(edge, trigs):
         for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
             if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:  
                 shared_trigs.append(t)
-                return True , shared
+                return True , shared_trigs
             elif e.points[0].x == edge.points[1].x and e.points[0].y == edge.points[1].y and e.points[1].x == edge.points[0].x and e.points[1].y == edge.points[0].y:
                 shared_trigs.append(t)
-                return True
+                return True , shared_trigs
 
     return False
 
@@ -213,7 +213,7 @@ def calculateCircle(t):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports_-_10.csv' 
 
 points = []
 
@@ -222,9 +222,9 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         separated = line.split(',')
         # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
-        temp1 = float(separated[0])
-        temp2 = float(separated[1])
-        temp = [float(separated[0]), float(separated[1])]
+        temp1 = float(separated[6])
+        temp2 = float(separated[7])
+        temp = [float(separated[6]), float(separated[7])]
         '''
         try:
             temp1 = float(separated[6])
@@ -235,7 +235,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 100         # Number of points required for the plot/animation
+        N = 10        # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
@@ -280,7 +280,8 @@ def animate(i):
         for e in b_t.edges:
             copied_bad_trigs = bad_trigs[:] # remove from bad_trigs the bad trig that we are investigating 
             copied_bad_trigs.remove(b_t)
-            if not isSharedEdge(e, copied_bad_trigs):
+            flag  = isSharedEdge(e, copied_bad_trigs)
+            if not flag:
                 poly.append(e)
     for b_t in bad_trigs:
         trigs.remove(b_t)
@@ -299,22 +300,41 @@ def animate(i):
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
 
     # Draw triangles and circles (output can be manipulated from the comments)
+    #artists = []
+    #for t in trigs[:]:
+    #    trig_artist = t.toArtist()
+    #    artists.append(trig_artist)
+    #    plt.gca().add_patch(trig_artist)
+    #    c = Circle()
+    #    c.fromTriangle(t)
+    #    circ_artist = c.toArtist()
+    #    artists.append(circ_artist)
+    #    plt.gca().add_artist(circ_artist) # Circle drawing
+
+    
+
+    #draw Voronoi
     artists = []
     for t in trigs[:]:
-        trig_artist = t.toArtist()
-        artists.append(trig_artist)
-        plt.gca().add_patch(trig_artist)
-        c = Circle()
-        c.fromTriangle(t)
-        circ_artist = c.toArtist()
-        #artists.append(circ_artist)
-        #plt.gca().add_artist(circ_artist) # Circle drawing
-
+        for e in t.edges:
+            flag , vtrigs = isSharedEdge(e, trigs)
+            if flag:
+                for t2 in vtrigs:
+                    c1 = Circle()
+                    c2 = Circle()
+                    c1.fromTriangle(t)
+                    c2.fromTriangle(t2)
+                    centre1 = Point(c1.x, c1.y)
+                    centre2 = Point(c2.x, c2.y)
+                    e1 = Edge([centre1, centre2])
+                    edge_artist = e1.toArtist()
+                    artists.append(edge_artist)
+                    plt.gca().add_patch(edge_artist)
+    
+    
     return artists
 
-    for t in trigs[:]:
-        for e in t.edges:
-            if isSharedEdge
+                 
 # ???
 fig = plt.figure()
 ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
