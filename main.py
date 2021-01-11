@@ -31,6 +31,10 @@ class Edge:
     def __init__(self, points=[], trigs=[]):
         self.points = points
         self.trigs = trigs
+    # Draw the edge
+    def toArtist(self):
+        points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), self.points())))
+        return plt.Polygon(points[:2, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
 
 # Describes the Triangle class
 class Triangle:
@@ -141,11 +145,14 @@ def pointInsideCircumcircle(p, t):
 
 # Function 3: Finds if a certain edge is shared with any triangle
 def isSharedEdge(edge, trigs):
+    shared_trigs = []
     for t in trigs:
         for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
             if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:  
-                return True
+                shared_trigs.append(t)
+                return True , shared
             elif e.points[0].x == edge.points[1].x and e.points[0].y == edge.points[1].y and e.points[1].x == edge.points[0].x and e.points[1].y == edge.points[0].y:
+                shared_trigs.append(t)
                 return True
 
     return False
@@ -305,9 +312,12 @@ def animate(i):
 
     return artists
 
+    for t in trigs[:]:
+        for e in t.edges:
+            if isSharedEdge
 # ???
 fig = plt.figure()
-# ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
+ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
 
 fanim = animation.FuncAnimation(
     fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
