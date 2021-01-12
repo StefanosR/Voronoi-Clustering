@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import pylab as plt
 import matplotlib.animation as animation
 
 
@@ -330,23 +330,26 @@ def animate(i):
                     #centre2 = Point(c2.x, c2.y)
                     #x = list(range(c1.x, c2.x))
                     #y = list(range(c1.y, c2.y))
-                    edge_artist = plt.plot([c1.x,c2.x],[c1.y,c2.y])
+                    x = [c1.x, c2.x]
+                    y = [c1.y, c2.y]
+                    plt.plot(x,y)
                     #e1 = Edge([centre1, centre2])
                     #edge_artist = e1.toArtist()
-                    artists.append(edge_artist)
-                    plt.gca().add_patch(edge_artist)
+                    #artists.append(edge_artist)
+                    #plt.gca().add_patch(edge_artist)
     
     
     return artists
 
                  
 # ???
+for i in range(7,8):
+    animate(i)
+#fig = plt.figure()
+#ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
 
-fig = plt.figure()
-ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
-
-fanim = animation.FuncAnimation(
-    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
+#fanim = animation.FuncAnimation(
+#    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
 # Saves the results in gif:
 
