@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+
+
 # Info 
 # Algorithm: Delaunay Triangulation
 # List triangulation
@@ -34,7 +36,7 @@ class Edge:
     # Draw the edge
     def toArtist(self):
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), self.points())))
-        return plt.Polygon(points[:2, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
+        return plt.plot(points[:2, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
 
 # Describes the Triangle class
 class Triangle:
@@ -324,10 +326,13 @@ def animate(i):
                     c2 = Circle()
                     c1.fromTriangle(t)
                     c2.fromTriangle(t2)
-                    centre1 = Point(c1.x, c1.y)
-                    centre2 = Point(c2.x, c2.y)
-                    e1 = Edge([centre1, centre2])
-                    edge_artist = e1.toArtist()
+                    #centre1 = Point(c1.x, c1.y)
+                    #centre2 = Point(c2.x, c2.y)
+                    #x = list(range(c1.x, c2.x))
+                    #y = list(range(c1.y, c2.y))
+                    edge_artist = plt.plot([c1.x,c2.x],[c1.y,c2.y])
+                    #e1 = Edge([centre1, centre2])
+                    #edge_artist = e1.toArtist()
                     artists.append(edge_artist)
                     plt.gca().add_patch(edge_artist)
     
@@ -336,6 +341,7 @@ def animate(i):
 
                  
 # ???
+
 fig = plt.figure()
 ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
 
