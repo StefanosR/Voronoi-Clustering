@@ -331,7 +331,7 @@ ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμ
 #    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
 for i in range(1,13):
-    if 1<2:
+    if 1<13:
         animate(i)
     else: 
         trigs.append(animate(i))
@@ -351,28 +351,31 @@ for t in trigs:
 
 print(counter)
 #draw Voronoi
-  #  artists = []
-  #  for t in trigs[:]:
-  #      for e in t.edges:
-  #          flag , vtrigs = isSharedEdge(e, trigs)
-  #          if flag:
-  #              for t2 in vtrigs:
-  #                  c1 = Circle()
-  #                  c2 = Circle()
-  #                  c1.fromTriangle(t)
-  #                  c2.fromTriangle(t2)
-  #                  #centre1 = Point(c1.x, c1.y)
-  #                  #centre2 = Point(c2.x, c2.y)
-  #                  #x = list(range(c1.x, c2.x))
-  #                  #y = list(range(c1.y, c2.y))
-  #                  x = [c1.x, c2.x]
-  #                  y = [c1.y, c2.y]
-  #                  plt.plot(x,y)
-  #                  #e1 = Edge([centre1, centre2])
-  #                  #edge_artist = e1.toArtist()
-  #                  #artists.append(edge_artist)
-  #                  #plt.gca().add_patch(edge_artist)
-  #  
+#artists = []
+for t in trigs:
+    if t!= super_trig:
+        for e in t.edges:
+            flag , vtrigs = isSharedEdge(e, trigs)
+            if flag:
+                for t2 in vtrigs:
+                    flag2 = isContainPointsFromTrig(t2,super_trig)
+                    if not flag2 and t2!=t:
+                        c1 = Circle()
+                        c2 = Circle()
+                        c1.fromTriangle(t)
+                        c2.fromTriangle(t2)
+                        #centre1 = Point(c1.x, c1.y)
+                        #centre2 = Point(c2.x, c2.y)
+                        #x = list(range(c1.x, c2.x))
+                        #y = list(range(c1.y, c2.y))
+                        x = [c1.x, c2.x]
+                        y = [c1.y, c2.y]
+                        plt.plot(x,y)
+                        #e1 = Edge([centre1, centre2])
+                        #edge_artist = e1.toArtist()
+                        #artists.append(edge_artist)
+                        #plt.gca().add_patch(edge_artist)
+
     
 # Saves the results in gif:
 
