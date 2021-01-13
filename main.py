@@ -315,45 +315,68 @@ def animate(i):
 
     
 
-    #draw Voronoi
-    artists = []
-    for t in trigs[:]:
-        for e in t.edges:
-            flag , vtrigs = isSharedEdge(e, trigs)
-            if flag:
-                for t2 in vtrigs:
-                    c1 = Circle()
-                    c2 = Circle()
-                    c1.fromTriangle(t)
-                    c2.fromTriangle(t2)
-                    #centre1 = Point(c1.x, c1.y)
-                    #centre2 = Point(c2.x, c2.y)
-                    #x = list(range(c1.x, c2.x))
-                    #y = list(range(c1.y, c2.y))
-                    x = [c1.x, c2.x]
-                    y = [c1.y, c2.y]
-                    plt.plot(x,y)
-                    #e1 = Edge([centre1, centre2])
-                    #edge_artist = e1.toArtist()
-                    #artists.append(edge_artist)
-                    #plt.gca().add_patch(edge_artist)
     
-    
-    return artists
+    return  trigs
 
                  
 # ???
-for i in range(7,8):
-    animate(i)
-#fig = plt.figure()
-#ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
+#for i in range(1,10):
+#    animate(i)
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
 
 #fanim = animation.FuncAnimation(
 #    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
+for i in range(1,13):
+    if 1<2:
+        animate(i)
+    else: 
+        trigs.append(animate(i))
+
+counter= 0
+for t in trigs:
+    counter= counter +1
+    x1= (t.edges[0].points[0].x)
+    x2= (t.edges[1].points[0].x)
+    x3= (t.edges[2].points[0].x)
+    y1= (t.edges[0].points[0].y)
+    y2= (t.edges[1].points[0].y)
+    y3= (t.edges[2].points[0].y)
+    print(x1,y1)
+    print(x2,y2)
+    print(x3,y3)
+
+print(counter)
+#draw Voronoi
+  #  artists = []
+  #  for t in trigs[:]:
+  #      for e in t.edges:
+  #          flag , vtrigs = isSharedEdge(e, trigs)
+  #          if flag:
+  #              for t2 in vtrigs:
+  #                  c1 = Circle()
+  #                  c2 = Circle()
+  #                  c1.fromTriangle(t)
+  #                  c2.fromTriangle(t2)
+  #                  #centre1 = Point(c1.x, c1.y)
+  #                  #centre2 = Point(c2.x, c2.y)
+  #                  #x = list(range(c1.x, c2.x))
+  #                  #y = list(range(c1.y, c2.y))
+  #                  x = [c1.x, c2.x]
+  #                  y = [c1.y, c2.y]
+  #                  plt.plot(x,y)
+  #                  #e1 = Edge([centre1, centre2])
+  #                  #edge_artist = e1.toArtist()
+  #                  #artists.append(edge_artist)
+  #                  #plt.gca().add_patch(edge_artist)
+  #  
+    
 # Saves the results in gif:
 
-# fanim.save('triangulation.gif', writer='pillow') 
+#fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
 
