@@ -215,11 +215,11 @@ def calculateCircle(t):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports_-_10.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 50.csv' 
 
 points = []
 # Number of points required for the plot/animation
-N = 10
+N = 50
 with open(filename, 'r', encoding='utf8') as csvfile:
     for line in csvfile:
         separated = line.split(',')
@@ -261,6 +261,7 @@ for p in points:
 '''
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 # Calculate SuperTriangle
 super_trig = calculateSuperTriangle(points) 
@@ -383,6 +384,14 @@ for t in trigs:
 
     
 # Saves the results in gif:
+
+
+
+
+# all_vectors.append([[b1, b3], [b1, b4]])
+# all_vectors.append([[b2, b3], [b2, b4]])
+# all_vectors.append([[b1, b3], [b2, b3]])
+# all_vectors.append([[b2, b4], [b1, b4]])
 
 #fanim.save('triangulation.gif', writer='pillow') 
 
