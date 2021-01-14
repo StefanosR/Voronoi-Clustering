@@ -1,10 +1,10 @@
-from sys import float_repr_style
 import numpy as np
-import matplotlib.pyplot as plt
+import pylab as plt
 import matplotlib.animation as animation
 
-# Info -> Reminder to change opening comments
 
+
+# Info 
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
@@ -33,6 +33,10 @@ class Edge:
     def __init__(self, points=[], trigs=[]):
         self.points = points
         self.trigs = trigs
+    # Draw the edge
+    def toArtist(self):
+        points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), self.points())))
+        return plt.plot(points[:2, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
 
 # Describes the Triangle class
 class Triangle:
@@ -44,7 +48,7 @@ class Triangle:
     # Triangle consists of 3 corners
     def points(self):
         return [self.edges[0].points[0], self.edges[1].points[0], self.edges[2].points[0]]
-    # Draw the triangle 
+    # Draw the triangle function
     def toArtist(self):
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), self.points())))
         return plt.Polygon(points[:3, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
@@ -143,12 +147,15 @@ def pointInsideCircumcircle(p, t):
 
 # Function 3: Finds if a certain edge is shared with any triangle
 def isSharedEdge(edge, trigs):
+    shared_trigs = []
     for t in trigs:
         for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
             if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:  
-                return True
+                shared_trigs.append(t)
+                return True , shared_trigs
             elif e.points[0].x == edge.points[1].x and e.points[0].y == edge.points[1].y and e.points[1].x == edge.points[0].x and e.points[1].y == edge.points[0].y:
-                return True
+                shared_trigs.append(t)
+                return True , shared_trigs
 
     return False
 
@@ -158,6 +165,7 @@ def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
                 return True
+
     return False
 
 # Function 5:
@@ -202,22 +210,12 @@ def calculateCircle(t):
     radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
     return ((cx, cy), radius)
 
-# Function 8: Whether a triangle contains a vertex from original super-triangle
-def containsVertex(t1, t2):
-    for v1 in t1.points():
-        for v2 in t2.points():
-            if v1.x == v2.x and v1.y == v2.y:
-                print("It works")
-                return 0
-            break    
-        break
-    
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Stefanos\OneDrive\Υπολογιστής\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA2.csv' 
+filename = r'C:\Users\giorg\Documents\GitHub\Voronoi-Clustering\Project Zoulf\airports - 50.csv' 
 
 points = []
 
@@ -226,9 +224,9 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         separated = line.split(',')
         # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
-        temp1 = float(separated[0])
-        temp2 = float(separated[1])
-        temp = [float(separated[0]), float(separated[1])]
+        temp1 = float(separated[6])
+        temp2 = float(separated[7])
+        temp = [float(separated[6]), float(separated[7])]
         '''
         try:
             temp1 = float(separated[6])
@@ -239,7 +237,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 10          # Number of points required for the plot/animation
+        N = 50     # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
@@ -265,38 +263,39 @@ for p in points:
 
 # Calculate SuperTriangle
 super_trig = calculateSuperTriangle(points) 
-
 trigs = [super_trig]
+
+
 
 def init(): # ??????
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
     return []
 
-# Animation σύμφωνα με τον ψευδοκώδικα Wikipedia
+# Animation, exactly as in Wiki
 def animate(i):
     p = points[i]
-    # Λείπει μια for (περιττή?)
     bad_trigs = []
-    for t in trigs:                          # first find all the triangles that are no longer valid due to the insertion
-        if pointInsideCircumcircle(p, t):  
+    for t in trigs:
+        if pointInsideCircumcircle(p, t):  # first find all the triangles that are no longer valid due to the insertion
             bad_trigs.append(t)
     poly = []
-    for b_t in bad_trigs:                    # find the boundary of the polygonal hole
+    for b_t in bad_trigs:
         for e in b_t.edges:
-            copied_bad_trigs = bad_trigs[:]  # remove from bad_trigs the bad trig that we are investigating 
+            copied_bad_trigs = bad_trigs[:] # remove from bad_trigs the bad trig that we are investigating 
             copied_bad_trigs.remove(b_t)
-            if not isSharedEdge(e, copied_bad_trigs):
+            flag  = isSharedEdge(e, copied_bad_trigs)
+            if not flag:
                 poly.append(e)
     for b_t in bad_trigs:
-        trigs.remove(b_t)                    # remove them from the data structure
+        trigs.remove(b_t)
     for e in poly:
-        T = createTrigFromEdgeAndPoint(e, p) # re-triangulate the polygonal hole
+        T = createTrigFromEdgeAndPoint(e, p)
         trigs.append(T)
-    # Κομμάτι που έλειπε
-    for t in trigs:                          # for each triangle in triangulation // done inserting points, now clean up
-        if containsVertex(t, super_trig):    # if triangle contains a vertex from original super-triangle
-            trigs.remove(t)                  # remove triangle from triangulation
+    # Auto leipei kai isws ftaei poy den afaireitai to super trig
+    # for each triangle in triangulation // done inserting points, now clean up
+    #   if triangle contains a vertex from original super-triangle
+    #       remove triangle from triangulation
     # return triangulation
     plt.cla()
 
@@ -305,28 +304,106 @@ def animate(i):
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
 
     # Draw triangles and circles (output can be manipulated from the comments)
-    artists = []
-    for t in trigs[:]:
-        trig_artist = t.toArtist()
-        artists.append(trig_artist)
-        plt.gca().add_patch(trig_artist)
-        c = Circle()
-        c.fromTriangle(t)
-        circ_artist = c.toArtist()
-        # artists.append(circ_artist)
-        # plt.gca().add_artist(circ_artist) # Circle drawing
-    return artists
+    #artists = []
+    #for t in trigs[:]:
+    #    trig_artist = t.toArtist()
+    #    artists.append(trig_artist)
+    #    plt.gca().add_patch(trig_artist)
+    #    c = Circle()
+    #    c.fromTriangle(t)
+    #    circ_artist = c.toArtist()
+    #    artists.append(circ_artist)
+    #    plt.gca().add_artist(circ_artist) # Circle drawing
 
+    
+
+    
+    return  trigs
+
+                 
 # ???
-fig = plt.figure()
-# ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
+#for i in range(1,10):
+#    animate(i)
 
-fanim = animation.FuncAnimation(
-    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
+
+#fanim = animation.FuncAnimation(
+#    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
+
+for i in range(1,13):
+    if 1<13:
+        animate(i)
+    else: 
+        trigs.append(animate(i))
+
+counter= 0
+for t in trigs:
+    counter= counter +1
+    x1= (t.edges[0].points[0].x)
+    x2= (t.edges[1].points[0].x)
+    x3= (t.edges[2].points[0].x)
+    y1= (t.edges[0].points[0].y)
+    y2= (t.edges[1].points[0].y)
+    y3= (t.edges[2].points[0].y)
+    print(x1,y1)
+    print(x2,y2)
+    print(x3,y3)
+
+print(counter)
+#draw Voronoi
+#artists = []
+centersX = []
+centersY=[]
+for t in trigs:
+    if t!= super_trig:
+        for e in t.edges:
+            flag , vtrigs = isSharedEdge(e, trigs)
+            if flag:
+                for t2 in vtrigs:
+                    flag2 = isContainPointsFromTrig(t2,super_trig)
+                    if not flag2 and t2!=t:
+                        c1 = Circle()
+                        c2 = Circle()
+                        c1.fromTriangle(t)
+                        c2.fromTriangle(t2)
+                        #centre1 = Point(c1.x, c1.y)
+                        #centre2 = Point(c2.x, c2.y)
+                        #x = list(range(c1.x, c2.x))
+                        #y = list(range(c1.y, c2.y))
+                        x = [c1.x, c2.x]
+                        y = [c1.y, c2.y]
+                        centersX.append(c1.x)
+                        centersY.append(c1.y)
+                        plt.plot(x,y,marker='o')
+                        #e1 = Edge([centre1, centre2])
+                        #edge_artist = e1.toArtist()
+                        #artists.append(edge_artist)
+                        #plt.gca().add_patch(edge_artist)
+
+#einai ta simeia toy csv
+x1 = [] 
+y1 = []
+#voronoi
+x2 = []
+y2 = []
+for z in points:
+    x1.append(points[z].x)
+    y1.append(points[z].y)
+for i in centersX:
+    x2.append(centersX[i])
+    y2.append(centersY[i])
+
+b1 = max(max(x1), max(x2)) #max x
+b2 = min(min(x1), min(x2)) #min x
+b3 = max(max(y1), max(y2)) #max y
+b4 = min(min(y1), min(y2)) #min y
+boundaries = [(0, b3), (0, b4), (None, b1), (None, b2)]
 
 # Saves the results in gif:
 
-# fanim.save('triangulation.gif', writer='pillow') 
+#fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
 
