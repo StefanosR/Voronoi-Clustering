@@ -218,7 +218,8 @@ def calculateCircle(t):
 filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports_-_10.csv' 
 
 points = []
-
+# Number of points required for the plot/animation
+N = 10
 with open(filename, 'r', encoding='utf8') as csvfile:
     for line in csvfile:
         separated = line.split(',')
@@ -237,7 +238,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 10        # Number of points required for the plot/animation
+               
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
@@ -299,7 +300,7 @@ def animate(i):
 
     # Draw points
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
-    plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
+    plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
 
     # Draw triangles and circles (output can be manipulated from the comments)
     #artists = []
@@ -330,8 +331,8 @@ ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμ
 #fanim = animation.FuncAnimation(
 #    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
-for i in range(1,13):
-    if 1<13:
+for i in range(1,N + 3):
+    if 1<N+3:
         animate(i)
     else: 
         trigs.append(animate(i))
@@ -339,21 +340,24 @@ for i in range(1,13):
 counter= 0
 for t in trigs:
     counter= counter +1
-    x1= (t.edges[0].points[0].x)
-    x2= (t.edges[1].points[0].x)
-    x3= (t.edges[2].points[0].x)
-    y1= (t.edges[0].points[0].y)
-    y2= (t.edges[1].points[0].y)
-    y3= (t.edges[2].points[0].y)
-    print(x1,y1)
-    print(x2,y2)
-    print(x3,y3)
+    #x1= (t.edges[0].points[0].x)
+    #x2= (t.edges[1].points[0].x)
+    #x3= (t.edges[2].points[0].x)
+    #y1= (t.edges[0].points[0].y)
+    #y2= (t.edges[1].points[0].y)
+    #y3= (t.edges[2].points[0].y)
+    #print(x1,y1)
+    #print(x2,y2)
+    #print(x3,y3)
 
 print(counter)
 #draw Voronoi
 #artists = []
+
 for t in trigs:
     if t!= super_trig:
+        c1 = Circle()
+        c1.fromTriangle(t)
         for e in t.edges:
             flag , vtrigs = isSharedEdge(e, trigs)
             if flag:
@@ -370,7 +374,8 @@ for t in trigs:
                         #y = list(range(c1.y, c2.y))
                         x = [c1.x, c2.x]
                         y = [c1.y, c2.y]
-                        plt.plot(x,y)
+                        plt.plot(x,y, 'r')
+
                         #e1 = Edge([centre1, centre2])
                         #edge_artist = e1.toArtist()
                         #artists.append(edge_artist)
