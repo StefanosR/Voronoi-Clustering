@@ -215,7 +215,7 @@ def calculateCircle(t):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\giorg\Documents\GitHub\Voronoi-Clustering\Project Zoulf\airports - 50.csv' 
+filename = r'C:\Users\giorg\Documents\GitHub\Voronoi-Clustering\Project Zoulf\airports - 100.csv' 
 
 points = []
 
@@ -260,7 +260,11 @@ for p in points:
 '''
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+X1 = [] 
+Y1 = []
+for z in points:
+    X1.append(z.x)
+    Y1.append(z.y)
 # Calculate SuperTriangle
 super_trig = calculateSuperTriangle(points) 
 trigs = [super_trig]
@@ -301,7 +305,7 @@ def animate(i):
 
     # Draw points
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
-    plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
+    plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
 
     # Draw triangles and circles (output can be manipulated from the comments)
     #artists = []
@@ -332,8 +336,8 @@ ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμ
 #fanim = animation.FuncAnimation(
 #    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
-for i in range(1,13):
-    if 1<13:
+for i in range(1,N + 3):
+    if 1<N+3:
         animate(i)
     else: 
         trigs.append(animate(i))
@@ -376,33 +380,43 @@ for t in trigs:
                         y = [c1.y, c2.y]
                         centersX.append(c1.x)
                         centersY.append(c1.y)
-                        plt.plot(x,y,marker='o')
+                        plt.plot(x,y,'r')
                         #e1 = Edge([centre1, centre2])
                         #edge_artist = e1.toArtist()
                         #artists.append(edge_artist)
                         #plt.gca().add_patch(edge_artist)
 
 #einai ta simeia toy csv
-x1 = [] 
-y1 = []
+
 #voronoi
 x2 = []
 y2 = []
-for z in points:
-    x1.append(points[z].x)
-    y1.append(points[z].y)
-for i in centersX:
-    x2.append(centersX[i])
-    y2.append(centersY[i])
 
-b1 = max(max(x1), max(x2)) #max x
-b2 = min(min(x1), min(x2)) #min x
-b3 = max(max(y1), max(y2)) #max y
-b4 = min(min(y1), min(y2)) #min y
+for i in centersX:
+    x2.append(i)
+for i in centersY:
+    y2.append(i)
+
+b1 = max(max(X1), max(x2)) + 100 #max x
+b2 = min(min(X1), min(x2)) - 100 #min x
+b3 = max(max(Y1), max(y2)) +100 #max y
+b4 = min(min(Y1), min(y2)) -100 #min y
 boundaries = [(0, b3), (0, b4), (None, b1), (None, b2)]
 
 # Saves the results in gif:
 
+x1 = [b1, b1]
+y1 = [b3, b4]
+plt.plot(x1,y1,'g')
+x2 = [b2, b2]
+y2 = [b3, b4]
+plt.plot(x2,y2,'g')
+x3 = [b1, b2]
+y3 = [b3, b3]
+plt.plot(x3,y3,'g')
+x4 = [b1, b2]
+y4 = [b4, b4]
+plt.plot(x4,y4,'g')
 #fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
