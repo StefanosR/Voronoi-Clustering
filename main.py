@@ -215,11 +215,10 @@ def calculateCircle(t):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 50.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 200.csv' 
 
 points = []
-# Number of points required for the plot/animation
-N = 50
+
 with open(filename, 'r', encoding='utf8') as csvfile:
     for line in csvfile:
         separated = line.split(',')
@@ -238,7 +237,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-               
+        N = 199     # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
@@ -261,11 +260,16 @@ for p in points:
 '''
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+X1 = [] 
+Y1 = []
+for z in points:
+    X1.append(z.x)
+    Y1.append(z.y)
 # Calculate SuperTriangle
 super_trig = calculateSuperTriangle(points) 
 trigs = [super_trig]
+
+
 
 def init(): # ??????
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
@@ -341,24 +345,23 @@ for i in range(1,N + 3):
 counter= 0
 for t in trigs:
     counter= counter +1
-    #x1= (t.edges[0].points[0].x)
-    #x2= (t.edges[1].points[0].x)
-    #x3= (t.edges[2].points[0].x)
-    #y1= (t.edges[0].points[0].y)
-    #y2= (t.edges[1].points[0].y)
-    #y3= (t.edges[2].points[0].y)
-    #print(x1,y1)
-    #print(x2,y2)
-    #print(x3,y3)
+    # x1= (t.edges[0].points[0].x)
+    # x2= (t.edges[1].points[0].x)
+    # x3= (t.edges[2].points[0].x)
+    # y1= (t.edges[0].points[0].y)
+    # y2= (t.edges[1].points[0].y)
+    # y3= (t.edges[2].points[0].y)
+    # print(x1,y1)
+    # print(x2,y2)
+    # print(x3,y3)
 
 print(counter)
 #draw Voronoi
 #artists = []
-
+centersX = []
+centersY=[]
 for t in trigs:
     if t!= super_trig:
-        c1 = Circle()
-        c1.fromTriangle(t)
         for e in t.edges:
             flag , vtrigs = isSharedEdge(e, trigs)
             if flag:
@@ -375,24 +378,36 @@ for t in trigs:
                         #y = list(range(c1.y, c2.y))
                         x = [c1.x, c2.x]
                         y = [c1.y, c2.y]
-                        plt.plot(x,y, 'r')
-
+                        centersX.append(c1.x)
+                        centersY.append(c1.y)
+                        plt.plot(x,y,'r')
                         #e1 = Edge([centre1, centre2])
                         #edge_artist = e1.toArtist()
                         #artists.append(edge_artist)
                         #plt.gca().add_patch(edge_artist)
 
-    
+#einai ta simeia toy csv
+
+#voronoi
+x2 = []
+y2 = []
+
+for i in centersX:
+    x2.append(i)
+for i in centersY:
+    y2.append(i)
+
+b1 = max(max(X1), max(x2)) + 50 #max x
+b2 = min(min(X1), min(x2)) - 50 #min x
+b3 = max(max(Y1), max(y2)) +50 #max y
+b4 = min(min(Y1), min(y2)) -50 #min y
+boundaries = [(0, b3), (0, b4), (None, b1), (None, b2)]
+
 # Saves the results in gif:
 
-
-
-
-# all_vectors.append([[b1, b3], [b1, b4]])
-# all_vectors.append([[b2, b3], [b2, b4]])
-# all_vectors.append([[b1, b3], [b2, b3]])
-# all_vectors.append([[b2, b4], [b1, b4]])
-
+xborders = [b1, b1, b2, b2, b1]
+yborders = [b3, b4, b4, b3, b3]
+plt.plot(xborders,yborders,'g')
 #fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
