@@ -1,10 +1,9 @@
-1,Goroka Airport,Goroka,Papua New Guinea,GKA,AYGA,-60.0816898346,45.391998291,5282,10,U,Pacific/Port_Moresby,airport,OurAirports
-2,Madang Airport,Madang,Papua New Guinea,MAG,AYMD,-35.2070798874,165.789001465,20,10,U,Pacific/Port_Moresby,airport,OurAirports
-3,Mount Hagen Kagamuga Airport,Mount Hagen,Papua New Guinea,HGU,AYMH,-10.826789856,184.296005249,5388,10,U,Pacific/Port_Moresby,airport,OurAirports
+1,Goroka Airport,Goroka,Papua New Guinea,GKA,AYGA,-60.08168983,45.39199829,5282,10,U,Pacific/Port_Moresby,airport,OurAirports
+2,Madang Airport,Madang,Papua New Guinea,MAG,AYMD,-35.20707989,165.7890015,20,10,U,Pacific/Port_Moresby,airport,OurAirports
+3,Mount Hagen Kagamuga Airport,Mount Hagen,Papua New Guinea,HGU,AYMH,-10.82678986,184.2960052,5388,10,U,Pacific/Port_Moresby,airport,OurAirports
 4,Nadzab Airport,Nadzab,Papua New Guinea,LAE,AYNZ,-51.569803,106.725977,239,10,U,Pacific/Port_Moresby,airport,OurAirports
-5,Port Moresby Jacksons International Airport,Port Moresby,Papua New Guinea,POM,AYPY,-92.4433803558,147.2200012207,146,10,U,Pacific/Port_Moresby,airport,OurAirports
-6,Wewak International Airport,Wewak,Papua New Guinea,WWK,AYWK,4.5838301182,220.669006348,19,10,U,Pacific/Port_Moresby,airport,OurAirports
-7,Narsarsuaq Airport,Narssarssuaq,Greenland,UAK,BGBW,21.1604995728,-45.4259986877,112,-3,E,America/Godthab,airport,OurAirports
+5,Port Moresby Jacksons International Airport,Port Moresby,Papua New Guinea,POM,AYPY,-92.44338036,147.2200012,146,10,U,Pacific/Port_Moresby,airport,OurAirports
+6,Wewak International Airport,Wewak,Papua New Guinea,WWK,AYWK,4.583830118,220.6690063,19,10,U,Pacific/Port_Moresby,airport,OurAirports
+7,Narsarsuaq Airport,Narssarssuaq,Greenland,UAK,BGBW,21.16049957,-45.42599869,112,-3,E,America/Godthab,airport,OurAirports
 8,Godthaab / Nuuk Airport,Godthaab,Greenland,GOH,BGGH,54.19090271,-10,283,-3,E,America/Godthab,airport,OurAirports
-9,Kangerlussuaq Airport,Sondrestrom,Greenland,SFJ,BGSF,77.0122218992,-90.7116031647,165,-3,E,America/Godthab,airport,OurAirports
-10,Thule Air Base,Thule,Greenland,THU,BGTL,96.5311965942,-38.7032012939,251,-4,E,America/Thule,airport,OurAirports
+10,Thule Air Base,Thule,Greenland,THU,BGTL,96.53119659,-38.70320129,251,-4,E,America/Thule,airport,OurAirports

@@ -1,6 +1,8 @@
 import numpy as np
 import pylab as plt
 import matplotlib.animation as animation
+from matplotlib import collections as mc
+from shapely.geometry import Point, LineString
 
 
 
@@ -210,15 +212,68 @@ def calculateCircle(t):
     radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
     return ((cx, cy), radius)
 
+#Find perpedicular line from 2 points
+def perpendicular(point1, point2):
+    m_x = (point1.x + point2.x) / 2
+    m_y = (point1.y + point2.y) / 2
+
+    if point2.x == point1.x:
+        a = 0
+        b = m_y
+    elif point2.y == point1.y:
+        a = None
+        b = m_x
+    else:
+        slope = (point2.y - point1.y) / (point2.x - point1.x)
+        a = -1 / slope
+        b = m_y - a * m_x
+
+    return a, b
+
+#Find intersection point of 2 lines
+def intersection(line1, line2):
+    if line1[0] is None:
+        if line2[0] is None:
+            return None
+        x0 = line1[1]
+        y0 = line2[0] * x0 + line2[1]
+    elif line2[0] is None:
+        x0 = line2[1]
+        y0 = line1[0] * x0 + line1[1]
+    elif line1[0] == line2[0]:
+        return None
+    else:
+        x0 = (line2[1] - line1[1]) / (line1[0] - line2[0])
+        y0 = line1[0] * x0 + line1[1]
+
+    return x0, y0
+
+#Check if point is inside boundaries
+def in_boundaries(this_point):
+    if b2 <= this_point[0] <= b1:
+        if b4 <= this_point[1] <= b3:
+            return True
+    return False
+
+#Number of intersections of a line with any edge
+def number_of_intersections(line, line_table):
+    count = 0
+    e1 = LineString([line[0], line[1]])
+    for l in line_table:
+        e2 = LineString([l[0], l[1]])
+        if e1.intersects(e2):
+            count += 1
+
+    return count
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 200.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 100.csv' 
 
 points = []
-
+N=0
 with open(filename, 'r', encoding='utf8') as csvfile:
     for line in csvfile:
         separated = line.split(',')
@@ -237,11 +292,12 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 199     # Number of points required for the plot/animation
-        print(temp)     # Prints our point coordinates in the output console  
+        N = N+1    # Number of points required for the plot/animation
+        #print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
 
+print('Number of points = ', N)
 # Manual user input:
 '''
 points = []
@@ -355,13 +411,16 @@ for t in trigs:
     # print(x2,y2)
     # print(x3,y3)
 
-print(counter)
-#draw Voronoi
+print('Number of Delaunay triangles = ', counter)
+
+#draw Voronoi cells
 #artists = []
 centersX = []
 centersY=[]
+v_edges = []
 for t in trigs:
-    if t!= super_trig:
+    flag3 = isContainPointsFromTrig(t,super_trig)
+    if t!= super_trig and not flag3:
         for e in t.edges:
             flag , vtrigs = isSharedEdge(e, trigs)
             if flag:
@@ -372,6 +431,8 @@ for t in trigs:
                         c2 = Circle()
                         c1.fromTriangle(t)
                         c2.fromTriangle(t2)
+                        current_v_edge = [(c1.x , c1.y),(c2.x, c2.y)]
+                        v_edges.append(current_v_edge)
                         #centre1 = Point(c1.x, c1.y)
                         #centre2 = Point(c2.x, c2.y)
                         #x = list(range(c1.x, c2.x))
@@ -397,14 +458,52 @@ for i in centersX:
 for i in centersY:
     y2.append(i)
 
-b1 = max(max(X1), max(x2)) + 50 #max x
-b2 = min(min(X1), min(x2)) - 50 #min x
-b3 = max(max(Y1), max(y2)) +50 #max y
-b4 = min(min(Y1), min(y2)) -50 #min y
+b1 = max(max(X1), max(x2))  #max x
+b2 = min(min(X1), min(x2))  #min x
+addx = abs(b2-b1)*0.1
+b1 = b1 + addx
+b2 = b2 - addx
+b3 = max(max(Y1), max(y2)) #max y
+b4 = min(min(Y1), min(y2)) #min y
+addy = abs(b3-b4)*0.1
+b3 = b3 + addy
+b4 = b4 - addy
 boundaries = [(0, b3), (0, b4), (None, b1), (None, b2)]
 
-# Saves the results in gif:
 
+
+semi_lines= []
+#Draw Voronoi semilines
+for t in trigs:
+    flag3 = isContainPointsFromTrig(t,super_trig)
+    if t!= super_trig and not flag3:
+        for e in t.edges:
+            flag , vtrigs = isSharedEdge(e, trigs)
+            if flag:
+                for t2 in vtrigs:
+                    flag2 = isContainPointsFromTrig(t2,super_trig)
+                    if flag2 and t2!=t:
+                        p = perpendicular(e.points[0],e.points[1])
+                        for b in boundaries:
+                            b_point = intersection(p,b)
+                            if b_point is not None:
+                                    if in_boundaries(b_point):
+                                        c1 = Circle()
+                                        c1.fromTriangle(t)
+                                        cp = c1.x, c1.y
+                                        semi_line = [cp, b_point]
+                                        if number_of_intersections(semi_line, v_edges) <= 2:
+                                            #if number_of_intersections(semi_line, semi_lines) <2:
+                                            semi_lines.append(semi_line)
+
+
+
+
+
+
+# Saves the results in gif:
+lc = mc.LineCollection(semi_lines, colors = 'r')
+ax.add_collection(lc)
 xborders = [b1, b1, b2, b2, b1]
 yborders = [b3, b4, b4, b3, b3]
 plt.plot(xborders,yborders,'g')
