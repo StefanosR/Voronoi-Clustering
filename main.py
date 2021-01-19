@@ -25,10 +25,10 @@ from shapely.geometry import Point, LineString
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points
-class Point:
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
+# class Point:
+#     def __init__(self, x=0, y=0):
+#         self.x = x
+#         self.y = y
 
 # Consists of the points and triangles of each edge (2)
 class Edge:
@@ -265,75 +265,10 @@ def number_of_intersections(line, line_table):
             count += 1
 
     return count
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# Dataset point input
-
-# Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 100.csv' 
-
-points = []
-N=0
-with open(filename, 'r', encoding='utf8') as csvfile:
-    for line in csvfile:
-        separated = line.split(',')
-        # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
-        # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
-        temp1 = float(separated[6])
-        temp2 = float(separated[7])
-        temp = [float(separated[6]), float(separated[7])]
-        '''
-        try:
-            temp1 = float(separated[6])
-            temp2 = float(separated[7])
-            temp = [float(separated[6]), float(separated[7])]
-        except ValueError:
-            temp1 = float(separated[7])
-            temp2 = float(separated[8])
-            temp = [float(separated[7]), float(separated[8])]
-        '''
-        N = N+1    # Number of points required for the plot/animation
-        #print(temp)     # Prints our point coordinates in the output console  
-        # Appends the scanned points into the point array as data of the Point Class
-        points.append(Point(temp1,temp2))
-
-print('Number of points = ', N)
-# Manual user input:
-'''
-points = []
-N = int(input()) # Count of points
-for i in range(N):
-    xy = list(map(int, input().split(' ')[:2]))
-    points.append(Point(xy[0], xy[1]))
-'''
-
-# Automatic input (20 random points)
-'''
-N = 20 # Count of points
-points = list(map(lambda p: Point(p[0], p[1]), np.random.rand(N, 2)))
-for p in points:
-    p.x = p.x * 1.5
-'''
-
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-X1 = [] 
-Y1 = []
-for z in points:
-    X1.append(z.x)
-    Y1.append(z.y)
-# Calculate SuperTriangle
-super_trig = calculateSuperTriangle(points) 
-trigs = [super_trig]
 
 
-
-def init(): # ??????
-    np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
-    plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
-    return []
-
-# Animation, exactly as in Wiki
-def animate(i):
+# Find Delaunay Triangulation, exactly as in Wiki
+def DelaunayTrigs(i):
     p = points[i]
     bad_trigs = []
     for t in trigs:
@@ -379,42 +314,93 @@ def animate(i):
 
     
     return  trigs
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-                 
-# ???
-#for i in range(1,10):
-#    animate(i)
+# Dataset point input
+
+# Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 100.csv' 
+
+points = []
+N=0
+with open(filename, 'r', encoding='utf8') as csvfile:
+    for line in csvfile:
+        separated = line.split(',')
+        # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
+        # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
+        temp1 = float(separated[6])
+        temp2 = float(separated[7])
+        temp = [float(separated[6]), float(separated[7])]
+        '''
+        try:
+            temp1 = float(separated[6])
+            temp2 = float(separated[7])
+            temp = [float(separated[6]), float(separated[7])]
+        except ValueError:
+            temp1 = float(separated[7])
+            temp2 = float(separated[8])
+            temp = [float(separated[7]), float(separated[8])]
+        '''
+        N = N+1    # Number of points required for the plot/animation
+        #print(temp)     # Prints our point coordinates in the output console  
+        # Appends the scanned points into the point array as data of the Point Class
+        points.append(Point(temp1,temp2))
+
+print('Number of points = ', N)
+
+# # Manual user input:
+# '''
+# points = []
+# N = int(input()) # Count of points
+# for i in range(N):
+#     xy = list(map(int, input().split(' ')[:2]))
+#     points.append(Point(xy[0], xy[1]))
+# '''
+
+# # Automatic input (20 random points)
+# '''
+# N = 20 # Count of points
+# points = list(map(lambda p: Point(p[0], p[1]), np.random.rand(N, 2)))
+# for p in points:
+#     p.x = p.x * 1.5
+# '''
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Get points before super triangle
+X1 = [] 
+Y1 = []
+for z in points:
+    X1.append(z.x) 
+    Y1.append(z.y)
+
+# Calculate SuperTriangle
+super_trig = calculateSuperTriangle(points) 
+trigs = [super_trig]
+
+
+
 
 
 fig = plt.figure()
 ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
 
-#fanim = animation.FuncAnimation(
-#    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
+print('Running Delaunay Triangulation')
 
 for i in range(1,N + 3):
     if 1<N+3:
-        animate(i)
+        DelaunayTrigs(i)
     else: 
-        trigs.append(animate(i))
+        trigs.append(DelaunayTrigs(i))
 
 counter= 0
 for t in trigs:
     counter= counter +1
-    # x1= (t.edges[0].points[0].x)
-    # x2= (t.edges[1].points[0].x)
-    # x3= (t.edges[2].points[0].x)
-    # y1= (t.edges[0].points[0].y)
-    # y2= (t.edges[1].points[0].y)
-    # y3= (t.edges[2].points[0].y)
-    # print(x1,y1)
-    # print(x2,y2)
-    # print(x3,y3)
 
 print('Number of Delaunay triangles = ', counter)
 
-#draw Voronoi cells
-#artists = []
+print('Drawing Voronoi Cells')
+
+# Draw Voronoi cells
 centersX = []
 centersY=[]
 v_edges = []
@@ -447,9 +433,8 @@ for t in trigs:
                         #artists.append(edge_artist)
                         #plt.gca().add_patch(edge_artist)
 
-#einai ta simeia toy csv
 
-#voronoi
+# Find Borders
 x2 = []
 y2 = []
 
@@ -470,13 +455,16 @@ b3 = b3 + addy
 b4 = b4 - addy
 boundaries = [(0, b3), (0, b4), (None, b1), (None, b2)]
 
+xborders = [b1, b1, b2, b2, b1]
+yborders = [b3, b4, b4, b3, b3]
+plt.plot(xborders,yborders,'g')
 
-
+# Draw Voronoi semilines
+print('Drawing Voronoi Semi-lines')
 semi_lines= []
-#Draw Voronoi semilines
 for t in trigs:
     flag3 = isContainPointsFromTrig(t,super_trig)
-    if t!= super_trig and not flag3:
+    if not flag3:
         for e in t.edges:
             flag , vtrigs = isSharedEdge(e, trigs)
             if flag:
@@ -493,22 +481,33 @@ for t in trigs:
                                         cp = c1.x, c1.y
                                         semi_line = [cp, b_point]
                                         if number_of_intersections(semi_line, v_edges) <= 2:
-                                            #if number_of_intersections(semi_line, semi_lines) <2:
+                                            #if number_of_intersections(semi_line, semi_lines) <=2:
                                             semi_lines.append(semi_line)
 
 
 
-
-
-
-# Saves the results in gif:
+# Draw semilines
 lc = mc.LineCollection(semi_lines, colors = 'r')
 ax.add_collection(lc)
-xborders = [b1, b1, b2, b2, b1]
-yborders = [b3, b4, b4, b3, b3]
-plt.plot(xborders,yborders,'g')
+
+
+# def init(): # ??????
+#     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
+#     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
+#     return []
+
+
+
+                 
+# ???
+
+
+#fanim = animation.FuncAnimation(
+#    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
+
+
 #fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
-
+print('Results:')
 plt.show()
