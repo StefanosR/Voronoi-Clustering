@@ -2,7 +2,7 @@ import numpy as np
 import pylab as plt
 import matplotlib.animation as animation
 from matplotlib import collections as mc
-from shapely.geometry import Point, LineString
+from shapely.geometry import  LineString
 
 
 
@@ -25,10 +25,10 @@ from shapely.geometry import Point, LineString
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points
-# class Point:
-#     def __init__(self, x=0, y=0):
-#         self.x = x
-#         self.y = y
+class Point:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
 
 # Consists of the points and triangles of each edge (2)
 class Edge:
