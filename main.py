@@ -319,7 +319,7 @@ def DelaunayTrigs(i):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 100.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 50.csv' 
 
 points = []
 N=0
@@ -333,9 +333,9 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         temp = [float(separated[6]), float(separated[7])]
         '''
         try:
-            temp1 = float(separated[6])
-            temp2 = float(separated[7])
-            temp = [float(separated[6]), float(separated[7])]
+            temp1 = float(separated[5])
+            temp2 = float(separated[6])
+            temp = [float(separated[5]), float(separated[6])]
         except ValueError:
             temp1 = float(separated[7])
             temp2 = float(separated[8])
