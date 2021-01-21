@@ -321,9 +321,10 @@ def isSharedTrig(trig, tets):
         
         
         if flag
-            shared_tets.append(tet)   
+            shared_tets.append(tet)
+            return True , shared_tets   
 
-    return False , shared_tets
+    return False 
 
 # Function 4:
 def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
