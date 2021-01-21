@@ -66,7 +66,7 @@ class Tetrahedron:
             t.tetrahedrons.append(self)
     def edges(self):
         edges=[]
-        for t in triangles:
+        for t in self.triangles:
             for e in t.edges:
                 flag = False
                 if edges:
@@ -81,7 +81,7 @@ class Tetrahedron:
     
     def points(self):
         points=[]
-        for e in self.edges:
+        for e in self.edges() :
             flag = False
             if points:
                 for p in e.points:
@@ -91,7 +91,8 @@ class Tetrahedron:
                         if not flag:
                             points.append(p)
             else :
-                points.append(e.points)
+                points.append(e.points[0])
+                points.append(e.points[1])
         return points
 
 # Circles of the Delaunay triangulation
@@ -146,10 +147,10 @@ class Sphere:
         
         
         # Math
-        t1 = - (p1[0]^2 + p1[1]^2 + p1[2]^2)
-        t2 = - (p2[0]^2 + p2[1]^2 + p2[2]^2)
-        t3 = - (p3[0]^2 + p3[1]^2 + p3[2]^2)
-        t4 = - (p4[0]^2 + p4[1]^2 + p4[2]^2)
+        t1 = - (p1[0]*p1[0] + p1[1]*p1[1] + p1[2]*p1[2])
+        t2 = - (p2[0]*p2[0] + p2[1]*p2[1] + p2[2]*p2[2])
+        t3 = - (p3[0]*p3[0] + p3[1]*p3[1] + p3[2]*p3[2])
+        t4 = - (p4[0]*p4[0] + p4[1]*p4[1] + p4[2]*p4[2])
 
         #Define arrays for dets
         T = np.array([[p1[0], p1[1], p1[2], 1],
@@ -158,7 +159,8 @@ class Sphere:
                      [p4[0], p4[1], p4[2], 1]])
         
         detT = np.linalg.det(T)
-
+        print(detT)
+        
         D = np.array([[t1, p1[1], p1[2], 1],
                      [t2, p2[1], p2[2], 1], 
                      [t3, p3[1], p3[2], 1],
@@ -166,6 +168,7 @@ class Sphere:
 
         detD = np.linalg.det(D)
         detD = detD / detT
+        print(detD)
 
         E = np.array([[p1[0], t1, p1[2], 1],
                      [p2[0], t2, p2[2], 1], 
@@ -174,6 +177,7 @@ class Sphere:
         
         detE = np.linalg.det(E)
         detE = detE / detT
+        print(detE)
 
         F = np.array([[p1[0], p1[1], t1, 1],
                      [p2[0], p2[1], t2, 1], 
@@ -284,45 +288,47 @@ def pointInsideSphere(p, tet):
     return distance < s.radius
 
 # Function 3: Finds if a certain edge is shared with any triangle
-def isSharedTrig(trig, tets):
+def isSharedTrig(trig, tets, current_tet):
     shared_tets = []
     flag_general
     for tet in tets:
-        flag = False
-        for trig1 in tet.triangles:  # check if the vertices of the inserted edge are same with those of the triangle
-            flag1 = False
-            e1 = trig1.edges[0] 
-            for e in trig.edges :
-                if e.points[0].x == e1.points[0].x and e.points[0].y == e1.points[0].y and e.points[1].x == e1.points[1].x and e.points[1].y == e1.points[1].y:  
-                    flag1 = True
-                elif e.points[0].x == e1.points[1].x and e.points[0].y == e1.points[1].y and e.points[1].x == e1.points[0].x and e.points[1].y == e1.points[0].y:
-                    flag1 = True
-                else :
-            flag2 = False
-            e2 = trig1.edges[1] 
-            for e in trig.edges :
-                if e.points[0].x == e2.points[0].x and e.points[0].y == e2.points[0].y and e.points[1].x == e2.points[1].x and e.points[1].y == e2.points[1].y:  
-                    flag2 = True
-                elif e.points[0].x == e2.points[1].x and e.points[0].y == e2.points[1].y and e.points[1].x == e2.points[0].x and e.points[1].y == e2.points[0].y:
-                    flag2 = True
-                else :
-            flag3 = False
-            e3 = trig1.edges[2] 
-            for e in trig.edges :
-                if e.points[0].x == e3.points[0].x and e.points[0].y == e3.points[0].y and e.points[1].x == e3.points[1].x and e.points[1].y == e3.points[1].y:  
-                    flag3 = True
-                elif e.points[0].x == e3.points[1].x and e.points[0].y == e3.points[1].y and e.points[1].x == e3.points[0].x and e.points[1].y == e3.points[0].y:
-                    flag3 = True
-                else :
+        if tet!=current_tet:
+            flag = False
+            for trig1 in tet.triangles:  # check if the vertices of the inserted edge are same with those of the triangle
+                
+                flag1 = False
+                e1 = trig1.edges[0] 
+                for e in trig.edges :
+                    if e.points[0].x == e1.points[0].x and e.points[0].y == e1.points[0].y and e.points[1].x == e1.points[1].x and e.points[1].y == e1.points[1].y:  
+                        flag1 = True
+                    elif e.points[0].x == e1.points[1].x and e.points[0].y == e1.points[1].y and e.points[1].x == e1.points[0].x and e.points[1].y == e1.points[0].y:
+                        flag1 = True
+                
+                flag2 = False
+                e2 = trig1.edges[1] 
+                for e in trig.edges :
+                    if e.points[0].x == e2.points[0].x and e.points[0].y == e2.points[0].y and e.points[1].x == e2.points[1].x and e.points[1].y == e2.points[1].y:  
+                        flag2 = True
+                    elif e.points[0].x == e2.points[1].x and e.points[0].y == e2.points[1].y and e.points[1].x == e2.points[0].x and e.points[1].y == e2.points[0].y:
+                        flag2 = True
+
+                        
+                flag3 = False
+                e3 = trig1.edges[2] 
+                for e in trig.edges :
+                    if e.points[0].x == e3.points[0].x and e.points[0].y == e3.points[0].y and e.points[1].x == e3.points[1].x and e.points[1].y == e3.points[1].y:  
+                        flag3 = True
+                    elif e.points[0].x == e3.points[1].x and e.points[0].y == e3.points[1].y and e.points[1].x == e3.points[0].x and e.points[1].y == e3.points[0].y:
+                        flag3 = True
 
 
-            if flag1 and flag2 and flag3:
-                flag = True
-        
-        
-        if flag
-            shared_tets.append(tet)
-            return True , shared_tets   
+                if flag1 and flag2 and flag3:
+                    flag = True
+            
+            
+            if flag:
+                shared_tets.append(tet)
+                return True , shared_tets   
 
     return False 
 
@@ -336,13 +342,35 @@ def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
     return False
 
 # Function 5:
-def createTrigFromEdgeAndPoint(edge, point):
-    e1 = Edge([edge.points[0], edge.points[1]])
-    e2 = Edge([edge.points[1], point])
-    e3 = Edge([point, edge.points[0]])
-    t = Triangle([e1, e2, e3])
+def createTetFromTrigAndPoint(trig, p):
+    p1 = trig.points[0]
+    p2 = trig.points[1]
+    p3 = trig.points[2]
 
-    return t
+    e1 = Edge([p1, p2])
+    e2 = Edge([p2, p3])
+    e2i = Edge([p3, p2])
+    e3 = Edge([p3, p1])
+    e3i = Edge([p1, p3])
+    e4 = Edge([p, p1])
+    e5 = Edge([p, p3])
+    e5i = Edge([p3, p])
+    e6 = Edge([p2, p])
+
+    t1 = Triangle([e1, e2, e3]) #aristera
+    t2 = Triangle([e1, e6, e4]) #kato
+    t3 = Triangle([e6, e5, e2i]) #piso
+    t4 = Triangle([e4, e3i, e5i]) #brosta
+
+    # e1 = Edge([edge.points[0], edge.points[1]])
+    # e2 = Edge([edge.points[1], point])
+    # e3 = Edge([point, edge.points[0]])
+    # t = Triangle([e1, e2, e3])
+
+    tet = Tetrahedron([t1, t2, t3, t4])
+   
+    return tet
+
 
 # Function 6:
 def checkDelaunay(triangle):
@@ -437,20 +465,20 @@ def DelaunayTets(i):
     p = points[i]
     bad_tets = []
     for tet in tets:
-        if pointInsideSphere(p, t):  # first find all the triangles that are no longer valid due to the insertion
-            bad_tets.append(t)
+        if pointInsideSphere(p, tet):  # first find all the triangles that are no longer valid due to the insertion
+            bad_tets.append(tet)
     poly = []
     for b_t in bad_tets:
         for trig in b_t.triangles:
             copied_bad_tets = bad_tets[:] # remove from bad_tets the bad tet that we are investigating 
             copied_bad_tets.remove(b_t)
-            flag  = isSharedTrig(trig, copied_bad_tets)
+            flag  = isSharedTrig(trig, copied_bad_tets, b_t)
             if not flag:
-                poly.append(e)
+                poly.append(trig)
     for b_t in bad_trigs:
         trigs.remove(b_t)
-    for e in poly:
-        T = createTrigFromEdgeAndPoint(e, p)
+    for tr in poly:
+        T = createTetFromTrigAndPoint(tr, p)
         trigs.append(T)
     # Auto leipei kai isws ftaei poy den afaireitai to super trig
     # for each triangle in triangulation // done inserting points, now clean up
@@ -568,13 +596,13 @@ axis.scatter(x1,y1,z1)
 
 
 
-# print('Running Delaunay Triangulation')
+print('Running Delaunay Triangulation')
 
-# for i in range(1,N + 3):
-#     if 1<N+3:
-#         DelaunayTrigs(i)
-#     else: 
-#         trigs.append(DelaunayTrigs(i))
+for i in range(1,N + 4):
+    if 1<N+4:
+        DelaunayTets(i)
+    else: 
+        tets.append(DelaunayTets(i))
 
 # counter= 0
 # for t in trigs:
