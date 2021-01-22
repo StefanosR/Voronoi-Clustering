@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import pylab as plt
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
@@ -45,9 +46,8 @@ class Edge:
 # Describes the Triangle class
 class Triangle:
     # Initialize a Triangle
-    def __init__(self, edges=[], tetrahedrons=[]):
+    def __init__(self, edges=[]):
         self.edges = edges
-        self.tetrahedrons = tetrahedrons
         for e in edges:
             e.trigs.append(self)
     # Triangle consists of 3 corners
@@ -62,8 +62,35 @@ class Triangle:
 class Tetrahedron:
     def __init__(self, triangles=[]):
         self.triangles = triangles
-        for t in triangles:
-            t.tetrahedrons.append(self)
+
+    def frompoints(self, pnts=[]):
+        points = pnts
+        p1 = points[0]
+        p2 = points[1]
+        p3 = points[2]
+        p4 = points[3]
+        
+        e01 = Edge([p1, p2]) # edge 1 of trig 0
+        e02 = Edge([p2, p3])
+        e03 = Edge([p3, p1])
+        e11 = Edge([p3, p2])
+        e12 = Edge([p2, p4])
+        e13 = Edge([p4, p3])
+        e21 = Edge([p3, p4])
+        e22 = Edge([p4, p1])
+        e23 = Edge([p1, p3])
+        e31 = Edge([p1, p4])
+        e32 = Edge([p4, p2])
+        e33 = Edge([p2, p1])
+
+        t0 = Triangle([e01, e02, e03]) #aristera
+        t1 = Triangle([e11, e12, e13]) #kato
+        t2 = Triangle([e21, e22, e23]) #piso
+        t3 = Triangle([e31, e32, e33]) #brosta
+        self.triangles =[t0,t1,t2,t3]
+        return True
+
+
     def edges(self):
         edges=[]
         for t in self.triangles:
@@ -71,29 +98,42 @@ class Tetrahedron:
                 flag = False
                 if edges:
                     for e2 in edges:
-                        if e==e2:
+                        if e.points[0].x == e2.points[0].x and e.points[0].y == e2.points[0].y and e.points[1].x == e2.points[1].x and e.points[1].y == e2.points[1].y:  
+                            flag = True
+                        elif e.points[0].x == e2.points[1].x and e.points[0].y == e2.points[1].y and e.points[1].x == e2.points[0].x and e.points[1].y == e2.points[0].y:
                             flag = True
                     if not flag:
                         edges.append(e)
                 else:
-                    edges.append(e)               
+                    edges.append(e)
+        # for ed in edges:
+        #     print("printing points of edges() point 1:", ed.points[0].x,ed.points[0].y,ed.points[0].z, " point 2:",ed.points[1].x,ed.points[1].y, ed.points[1].z) 
+        # print("end")              
         return edges
     
     def points(self):
         points=[]
-        for e in self.edges() :
+        
+        for e in self.edges():
             flag = False
             if points:
                 for p in e.points:
                     for p2 in points:
                         if p==p2:
                             flag = True
-                        if not flag:
-                            points.append(p)
+                    if not flag:
+                        points.append(p)
             else :
                 points.append(e.points[0])
                 points.append(e.points[1])
+                # print("added first 2 points", points[0].x,  points[0].y,  points[0].z,  points[1].x,  points[1].y,  points[1].z )
         return points
+
+    def painttet(self):
+        points = np.array(list(map(lambda p: np.asarray([p.x, p.y,p.z]), self.points())))
+        verts= [ [points[0], points[1], points[2]], [points[2], points[1], points[3]], [points[2], points[3], points[0]], [points[0], points[3], points[1]] ]
+        axis.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
+        return True
 
 # Circles of the Delaunay triangulation
 class Circle:
@@ -141,16 +181,18 @@ class Sphere:
     def fromTetrahedron(self, tet):
         pnts = tet.points()
         p1 = [pnts[0].x, pnts[0].y, pnts[0].z]
-        p2 = [pnts[1].x, pnts[1].y, pnts[1].y]
-        p3 = [pnts[2].x, pnts[2].y, pnts[2].y]
-        p4 = [pnts[3].x, pnts[3].y, pnts[3].y]
-        
+        p2 = [pnts[1].x, pnts[1].y, pnts[1].z]
+        p3 = [pnts[2].x, pnts[2].y, pnts[2].z]
+        p4 = [pnts[3].x, pnts[3].y, pnts[3].z]
+        print("points of tet:", p1, p2 , p3, p4)
         
         # Math
         t1 = - (p1[0]*p1[0] + p1[1]*p1[1] + p1[2]*p1[2])
         t2 = - (p2[0]*p2[0] + p2[1]*p2[1] + p2[2]*p2[2])
         t3 = - (p3[0]*p3[0] + p3[1]*p3[1] + p3[2]*p3[2])
         t4 = - (p4[0]*p4[0] + p4[1]*p4[1] + p4[2]*p4[2])
+
+        print(" t1 = ",t1," t2 = ",t2," t3 = ",t3," t4 = ",t4,)
 
         #Define arrays for dets
         T = np.array([[p1[0], p1[1], p1[2], 1],
@@ -159,7 +201,7 @@ class Sphere:
                      [p4[0], p4[1], p4[2], 1]])
         
         detT = np.linalg.det(T)
-        print(detT)
+        print("T = ", detT)
         
         D = np.array([[t1, p1[1], p1[2], 1],
                      [t2, p2[1], p2[2], 1], 
@@ -167,8 +209,9 @@ class Sphere:
                      [t4, p4[1], p4[2], 1]])
 
         detD = np.linalg.det(D)
+        print("D = ",detD)
         detD = detD / detT
-        print(detD)
+
 
         E = np.array([[p1[0], t1, p1[2], 1],
                      [p2[0], t2, p2[2], 1], 
@@ -177,7 +220,7 @@ class Sphere:
         
         detE = np.linalg.det(E)
         detE = detE / detT
-        print(detE)
+        print("E = ",detE)
 
         F = np.array([[p1[0], p1[1], t1, 1],
                      [p2[0], p2[1], t2, 1], 
@@ -193,13 +236,29 @@ class Sphere:
                      [p4[0], p4[1], p4[2], t4]])
         
         detG = np.linalg.det(G)
+        print("G = ",detG)
         detG = detG / detT
         
         self.x = -detD / 2
         self.y = -detE / 2
         self.z = -detF / 2 
-        self.radius = math.sqrt(detD^2 + detE^2 + detF^2 - 4*detG)/2
+        self.radius = math.sqrt(detD*detD + detE*detE + detF*detF - 4*detG)/2
+        
         return True
+    
+    def paintsphere(self):
+        u, v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
+        x=np.cos(u)*np.sin(v)
+        y=np.sin(u)*np.sin(v)
+        z=np.cos(v)
+        # shift and scale sphere
+        x = self.radius*x + self.x
+        y = self.radius*y + self.y
+        z = self.radius*z + self.z
+        return (x,y,z)
+        # axis.scatter(self.x, self.y, self.z, s=np.pi*(self.radius)**2*100, c='blue', alpha=0.75)
+        # # plt.Sphere((self.x, self.y,self.z), self.radius, color='C0', fill=False, clip_on=True, alpha=0.2)
+        # return True
 
 
 # Function 1: Calculates the super triangle
@@ -216,33 +275,44 @@ def calculateSuperTetrahedron(points):
     b = p_max.y - p_min.y
     c = p_max.z - p_min.z
 
-    p1 = Point(p_min.x, p_min.y, p_min.z)
-    p2 = Point(p_min.x, p_max.y + b, p_min.z)
-    p3 = Point(p_min.x, p_min.y, p_max.z + c)
-    p4 = Point(p_max.x + a, p_min.y, p_min.z)
+    # p1 = Point(p_min.x - a, p_min.y - b, p_min.z - c)
+    # p2 = Point(p_min.x, p_max.y + b, p_min.z)
+    # p3 = Point(p_min.x, p_min.y, p_max.z + c)
+    # p4 = Point(p_max.x + a, p_min.y, p_min.z)
+
+    p1 = Point(0,0, 250)
+    p2 = Point(-250,-250, -250)
+    p3 = Point(250,-250, -250)
+    p4 = Point(0,250, -250)
 
     points.insert(0, p1)
     points.insert(0, p2)
     points.insert(0, p3)
     points.insert(0, p4)
 
-    e1 = Edge([p1, p2])
-    e2 = Edge([p2, p3])
-    e2i = Edge([p3, p2])
-    e3 = Edge([p3, p1])
-    e3i = Edge([p1, p3])
-    e4 = Edge([p4, p1])
-    e5 = Edge([p4, p3])
-    e5i = Edge([p3, p4])
-    e6 = Edge([p2, p4])
+    # e01 = Edge([p1, p2]) # edge 1 of trig 0
+    # e02 = Edge([p2, p3])
+    # e03 = Edge([p3, p1])
+    # e11 = Edge([p3, p2])
+    # e12 = Edge([p2, p4])
+    # e13 = Edge([p4, p3])
+    # e21 = Edge([p3, p4])
+    # e22 = Edge([p4, p1])
+    # e23 = Edge([p1, p3])
+    # e31 = Edge([p1, p4])
+    # e32 = Edge([p4, p2])
+    # e33 = Edge([p2, p1])
 
-    t1 = Triangle([e1, e2, e3]) #aristera
-    t2 = Triangle([e1, e6, e4]) #kato
-    t3 = Triangle([e6, e5, e2i]) #piso
-    t4 = Triangle([e4, e3i, e5i]) #brosta
+    # t0 = Triangle([e01, e02, e03]) #aristera
+    # t1 = Triangle([e11, e12, e13]) #kato
+    # t2 = Triangle([e21, e22, e23]) #piso
+    # t3 = Triangle([e31, e32, e33]) #brosta
 
-    t = Tetrahedron([t1, t2, t3, t4])
-   
+    # t = Tetrahedron([t0, t1, t2, t3])
+    
+    t = Tetrahedron()
+    t.frompoints([p1,p2,p3,p4])
+
     return t
 
 # Function 2:
@@ -256,7 +326,7 @@ def pointInsideSphere(p, tet):
     x2 = s.x
     y2 = s.y
     z2 = s.z
-    distance = math.sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2) 
+    distance = math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1)) 
 
     # pnts = tet.points()
 
@@ -290,7 +360,6 @@ def pointInsideSphere(p, tet):
 # Function 3: Finds if a certain edge is shared with any triangle
 def isSharedTrig(trig, tets, current_tet):
     shared_tets = []
-    flag_general
     for tet in tets:
         if tet!=current_tet:
             flag = False
@@ -347,27 +416,28 @@ def createTetFromTrigAndPoint(trig, p):
     p2 = trig.points[1]
     p3 = trig.points[2]
 
-    e1 = Edge([p1, p2])
-    e2 = Edge([p2, p3])
-    e2i = Edge([p3, p2])
-    e3 = Edge([p3, p1])
-    e3i = Edge([p1, p3])
-    e4 = Edge([p, p1])
-    e5 = Edge([p, p3])
-    e5i = Edge([p3, p])
-    e6 = Edge([p2, p])
+    # e1 = Edge([p1, p2])
+    # e2 = Edge([p2, p3])
+    # e2i = Edge([p3, p2])
+    # e3 = Edge([p3, p1])
+    # e3i = Edge([p1, p3])
+    # e4 = Edge([p, p1])
+    # e5 = Edge([p, p3])
+    # e5i = Edge([p3, p])
+    # e6 = Edge([p2, p])
 
-    t1 = Triangle([e1, e2, e3]) #aristera
-    t2 = Triangle([e1, e6, e4]) #kato
-    t3 = Triangle([e6, e5, e2i]) #piso
-    t4 = Triangle([e4, e3i, e5i]) #brosta
+    # t1 = Triangle([e1, e2, e3]) #aristera
+    # t2 = Triangle([e1, e6, e4]) #kato
+    # t3 = Triangle([e6, e5, e2i]) #piso
+    # t4 = Triangle([e4, e3i, e5i]) #brosta
 
     # e1 = Edge([edge.points[0], edge.points[1]])
     # e2 = Edge([edge.points[1], point])
     # e3 = Edge([point, edge.points[0]])
     # t = Triangle([e1, e2, e3])
 
-    tet = Tetrahedron([t1, t2, t3, t4])
+    t = Tetrahedron()
+    t.frompoints([p1,p2,p3,p])
    
     return tet
 
@@ -475,11 +545,11 @@ def DelaunayTets(i):
             flag  = isSharedTrig(trig, copied_bad_tets, b_t)
             if not flag:
                 poly.append(trig)
-    for b_t in bad_trigs:
-        trigs.remove(b_t)
+    for b_t in bad_tets:
+        tets.remove(b_t)
     for tr in poly:
         T = createTetFromTrigAndPoint(tr, p)
-        trigs.append(T)
+        tets.append(T)
     # Auto leipei kai isws ftaei poy den afaireitai to super trig
     # for each triangle in triangulation // done inserting points, now clean up
     #   if triangle contains a vertex from original super-triangle
@@ -506,7 +576,7 @@ def DelaunayTets(i):
     
 
     
-    return  trigs
+    return  tets
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
@@ -577,6 +647,17 @@ print('Number of points = ', N)
 super_tet = calculateSuperTetrahedron(points) 
 tets = [super_tet]
 
+stpoints =[]
+for p in super_tet.points():
+    stpoints.append(p)
+    print("Printing at end",p.x, p.y, p.z)
+ 
+# for t in super_tet.triangles:
+#     print("\n")
+#     for e in t.points():
+#         print(e.x,e.y,e.z)
+
+
 x1 = []
 y1 = []
 z1 = []
@@ -588,21 +669,35 @@ for p in points:
 # Draw points
 fig = plt.figure()
 axis = fig.add_subplot(111, projection='3d')
-
-
-
 axis.scatter(x1,y1,z1)
 
+# verts =[]
 
+# for t in super_tet.triangles:
+#     verts.append(t.points)
+# axis.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
 
+super_tet.painttet()
 
 print('Running Delaunay Triangulation')
 
-for i in range(1,N + 4):
-    if 1<N+4:
-        DelaunayTets(i)
-    else: 
-        tets.append(DelaunayTets(i))
+# s = Sphere()
+# s.fromTetrahedron(super_tet)
+
+# (xs,ys,zs) = s.paintsphere()
+# axis.plot_wireframe(xs, ys, zs, color="r")
+
+# s.paintsphere()
+# print("sphere", s.x,s.y,s.z,s.radius)
+
+
+
+DelaunayTets(1)
+# for i in range(1,N + 4):
+#     if 1<N+4:
+#         DelaunayTets(i)
+#     else: 
+#         tets.append(DelaunayTets(i))
 
 # counter= 0
 # for t in trigs:
