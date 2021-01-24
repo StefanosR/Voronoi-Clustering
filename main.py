@@ -131,7 +131,10 @@ class Tetrahedron:
 
     def painttet(self):
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y,p.z]), self.points())))
-        verts= [ [points[0], points[1], points[2]], [points[2], points[1], points[3]], [points[2], points[3], points[0]], [points[0], points[3], points[1]] ]
+        verts= [ [points[0], points[1], points[2]],
+         [points[2], points[1], points[3]],
+          [points[2], points[3], points[0]],
+           [points[0], points[3], points[1]] ]
         axis.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
         return True
 
@@ -180,6 +183,9 @@ class Sphere:
     # Create Sphere
     def fromTetrahedron(self, tet):
         pnts = tet.points()
+        for p in points:
+            print("Point:",p.x, p.y, p.z)
+        
         p1 = [pnts[0].x, pnts[0].y, pnts[0].z]
         p2 = [pnts[1].x, pnts[1].y, pnts[1].z]
         p3 = [pnts[2].x, pnts[2].y, pnts[2].z]
@@ -290,25 +296,6 @@ def calculateSuperTetrahedron(points):
     points.insert(0, p3)
     points.insert(0, p4)
 
-    # e01 = Edge([p1, p2]) # edge 1 of trig 0
-    # e02 = Edge([p2, p3])
-    # e03 = Edge([p3, p1])
-    # e11 = Edge([p3, p2])
-    # e12 = Edge([p2, p4])
-    # e13 = Edge([p4, p3])
-    # e21 = Edge([p3, p4])
-    # e22 = Edge([p4, p1])
-    # e23 = Edge([p1, p3])
-    # e31 = Edge([p1, p4])
-    # e32 = Edge([p4, p2])
-    # e33 = Edge([p2, p1])
-
-    # t0 = Triangle([e01, e02, e03]) #aristera
-    # t1 = Triangle([e11, e12, e13]) #kato
-    # t2 = Triangle([e21, e22, e23]) #piso
-    # t3 = Triangle([e31, e32, e33]) #brosta
-
-    # t = Tetrahedron([t0, t1, t2, t3])
     
     t = Tetrahedron()
     t.frompoints([p1,p2,p3,p4])
@@ -412,9 +399,10 @@ def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
 
 # Function 5:
 def createTetFromTrigAndPoint(trig, p):
-    p1 = trig.points[0]
-    p2 = trig.points[1]
-    p3 = trig.points[2]
+    points = trig.points()
+    p1 = points[0]
+    p2 = points[1]
+    p3 = points[2]
 
     # e1 = Edge([p1, p2])
     # e2 = Edge([p2, p3])
@@ -436,8 +424,8 @@ def createTetFromTrigAndPoint(trig, p):
     # e3 = Edge([point, edge.points[0]])
     # t = Triangle([e1, e2, e3])
 
-    t = Tetrahedron()
-    t.frompoints([p1,p2,p3,p])
+    tet = Tetrahedron()
+    tet.frompoints([p1,p2,p3,p])
    
     return tet
 
@@ -532,6 +520,7 @@ def number_of_intersections(line, line_table):
 
 # Find Delaunay Triangulation, exactly as in Wiki
 def DelaunayTets(i):
+    print("LOOP:", i)
     p = points[i]
     bad_tets = []
     for tet in tets:
@@ -555,11 +544,11 @@ def DelaunayTets(i):
     #   if triangle contains a vertex from original super-triangle
     #       remove triangle from triangulation
     # return triangulation
-    plt.cla()
+    # plt.cla()
 
     # Draw points
-    np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
-    plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
+    # np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
+    # plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
 
     # Draw triangles and circles (output can be manipulated from the comments)
     #artists = []
@@ -692,9 +681,9 @@ print('Running Delaunay Triangulation')
 
 
 
-DelaunayTets(1)
-# for i in range(1,N + 4):
-#     if 1<N+4:
+# DelaunayTets(1)
+# for i in range(1,N):
+#     if 1<N:
 #         DelaunayTets(i)
 #     else: 
 #         tets.append(DelaunayTets(i))
