@@ -217,10 +217,10 @@ def containsVertex(t1, t2):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Στέφανος Ρήγας\Desktop\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA2.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\Ski_Areas_NA.csv' 
 
 points = []
-
+N=0
 with open(filename, 'r', encoding='utf8') as csvfile:
     for line in csvfile:
         separated = line.split(',')
@@ -239,7 +239,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
         '''
-        N = 10          # Number of points required for the plot/animation
+        N +=1          # Number of points required for the plot/animation
         print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
