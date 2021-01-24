@@ -190,27 +190,6 @@ def checkDelaunay(triangle):
                     print('Alert')
     return 1
 
-# Function 7:
-def calculateCircle(t):
-    pnts = t.points()
-    p1 = [pnts[0].x, pnts[0].y]
-    p2 = [pnts[1].x, pnts[1].y]
-    p3 = [pnts[2].x, pnts[2].y]
-
-    temp = p2[0] * p2[0] + p2[1] * p2[1]
-    bc = (p1[0] * p1[0] + p1[1] * p1[1] - temp) / 2
-    cd = (temp - p3[0] * p3[0] - p3[1] * p3[1]) / 2
-    det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1])
-
-    if abs(det) < 1.0e-6:
-        return (None, np.inf)
-
-    # Center of circle
-    cx = (bc*(p2[1] - p3[1]) - cd*(p1[1] - p2[1])) / det
-    cy = ((p1[0] - p2[0]) * cd - (p2[0] - p3[0]) * bc) / det
-
-    radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
-    return ((cx, cy), radius)
 
 #Find perpedicular line from 2 points
 def perpendicular(point1, point2):
@@ -287,28 +266,14 @@ def DelaunayTrigs(i):
     for e in poly:
         T = createTrigFromEdgeAndPoint(e, p)
         trigs.append(T)
-    # Auto leipei kai isws ftaei poy den afaireitai to super trig
-    # for each triangle in triangulation // done inserting points, now clean up
-    #   if triangle contains a vertex from original super-triangle
-    #       remove triangle from triangulation
-    # return triangulation
+   
     plt.cla()
 
     # Draw points
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
 
-    # Draw triangles and circles (output can be manipulated from the comments)
-    #artists = []
-    #for t in trigs[:]:
-    #    trig_artist = t.toArtist()
-    #    artists.append(trig_artist)
-    #    plt.gca().add_patch(trig_artist)
-    #    c = Circle()
-    #    c.fromTriangle(t)
-    #    circ_artist = c.toArtist()
-    #    artists.append(circ_artist)
-    #    plt.gca().add_artist(circ_artist) # Circle drawing
+    
 
     
 
@@ -356,7 +321,7 @@ trigs = [super_trig]
 
 
 fig = plt.figure()
-ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμε να το κρατήσουμε
+ax = fig.add_subplot(111, aspect='equal') 
 
 print('Running Delaunay Triangulation')
 
@@ -393,19 +358,12 @@ for t in trigs:
                         c2.fromTriangle(t2)
                         current_v_edge = [(c1.x , c1.y),(c2.x, c2.y)]
                         v_edges.append(current_v_edge)
-                        #centre1 = Point(c1.x, c1.y)
-                        #centre2 = Point(c2.x, c2.y)
-                        #x = list(range(c1.x, c2.x))
-                        #y = list(range(c1.y, c2.y))
                         x = [c1.x, c2.x]
                         y = [c1.y, c2.y]
                         centersX.append(c1.x)
                         centersY.append(c1.y)
                         plt.plot(x,y,'r')
-                        #e1 = Edge([centre1, centre2])
-                        #edge_artist = e1.toArtist()
-                        #artists.append(edge_artist)
-                        #plt.gca().add_patch(edge_artist)
+                        
 
 
 # Find Borders
@@ -464,23 +422,6 @@ for t in trigs:
 lc = mc.LineCollection(semi_lines, colors = 'r')
 ax.add_collection(lc)
 
-
-# def init(): # ??????
-#     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
-#     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
-#     return []
-
-
-
-                 
-# ???
-
-
-#fanim = animation.FuncAnimation(
-#    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
-
-
-#fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
 print('Results:')
