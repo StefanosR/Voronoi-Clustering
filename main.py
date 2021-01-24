@@ -331,39 +331,13 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         temp1 = float(separated[6])
         temp2 = float(separated[7])
         temp = [float(separated[6]), float(separated[7])]
-        '''
-        try:
-            temp1 = float(separated[5])
-            temp2 = float(separated[6])
-            temp = [float(separated[5]), float(separated[6])]
-        except ValueError:
-            temp1 = float(separated[7])
-            temp2 = float(separated[8])
-            temp = [float(separated[7]), float(separated[8])]
-        '''
+        
         N = N+1    # Number of points required for the plot/animation
         #print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
 
 print('Number of points = ', N)
-
-# # Manual user input:
-# '''
-# points = []
-# N = int(input()) # Count of points
-# for i in range(N):
-#     xy = list(map(int, input().split(' ')[:2]))
-#     points.append(Point(xy[0], xy[1]))
-# '''
-
-# # Automatic input (20 random points)
-# '''
-# N = 20 # Count of points
-# points = list(map(lambda p: Point(p[0], p[1]), np.random.rand(N, 2)))
-# for p in points:
-#     p.x = p.x * 1.5
-# '''
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Get points before super triangle
