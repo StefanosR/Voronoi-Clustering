@@ -138,41 +138,7 @@ class Tetrahedron:
         axis.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
         return True
 
-# Circles of the Delaunay triangulation
-class Circle:
-    # Initialize Circle
-    def __init__(self, x=0, y=0, radius=0):
-        self.x = x
-        self.y = y
-        self.radius = radius
-    # Create Circle
-    def fromTriangle(self, t):
-        pnts = t.points()
-        p1 = [pnts[0].x, pnts[0].y]
-        p2 = [pnts[1].x, pnts[1].y]
-        p3 = [pnts[2].x, pnts[2].y]
-        # Math
-        temp = p2[0] * p2[0] + p2[1] * p2[1]                # (x2^2 + y2^2)
-        bc = (p1[0] * p1[0] + p1[1] * p1[1] - temp) / 2     # (x1^2 + y1^2 - x2^2 + y2^2)/2
-        cd = (temp - p3[0] * p3[0] - p3[1] * p3[1]) / 2     # ((x2^2 + y2^2) - x3^2 - y3^2)/2
-
-        # Det = (x1-x2)*(y2-y3) - (x2-x3)*(y1-y2)
-        det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1]) # or (p1[0] - p2[0]) * (p2[1] - p3[1]) - \ (p2[0] - p3[0]) * (p1[1] - p2[1])
-        
-        if abs(det) < 1.0e-6: # if 3 points are aligned, there can't be triangle
-            return False
-
-        self.x = (bc*(p2[1] - p3[1]) - cd*(p1[1] - p2[1])) / det
-        self.y = ((p1[0] - p2[0]) * cd - (p2[0] - p3[0]) * bc) / det
-        self.radius = np.sqrt((self.x - p1[0])**2 + (self.y - p1[1])**2)
-
-        return True
-
-    # Draw Circle
-    def toArtist(self):
-        return plt.Circle((self.x, self.y), self.radius, color='C0',
-                          fill=False, clip_on=True, alpha=0.2)
-
+# Sphere of the Delaunay triangulation
 class Sphere:
     # Initialize Sphere
     def __init__(self, x=0, y=0, z=0, radius=0):
@@ -270,21 +236,21 @@ class Sphere:
 # Function 1: Calculates the super triangle
 def calculateSuperTetrahedron(points):
     # Find boundary box that contain all points
-    p_min = Point(min(points, key=lambda p: p.x).x - 0.1,
-                  min(points, key=lambda p: p.y).y - 0.1,
-                  min(points, key=lambda p: p.z).z - 0.1,)
-    p_max = Point(max(points, key=lambda p: p.x).x + 0.1,
-                  max(points, key=lambda p: p.y).y + 0.1,
-                  max(points, key=lambda p: p.z).z + 0.1)
+    # p_min = Point(min(points, key=lambda p: p.x).x - 0.1,
+    #               min(points, key=lambda p: p.y).y - 0.1,
+    #               min(points, key=lambda p: p.z).z - 0.1,)
+    # p_max = Point(max(points, key=lambda p: p.x).x + 0.1,
+    #               max(points, key=lambda p: p.y).y + 0.1,
+    #               max(points, key=lambda p: p.z).z + 0.1)
 
-    a = p_max.x - p_min.x  # "distance" between max and min points
-    b = p_max.y - p_min.y
-    c = p_max.z - p_min.z
+    # a = p_max.x - p_min.x  # "distance" between max and min points
+    # b = p_max.y - p_min.y
+    # c = p_max.z - p_min.z
 
-    # p1 = Point(p_min.x - a, p_min.y - b, p_min.z - c)
-    # p2 = Point(p_min.x, p_max.y + b, p_min.z)
-    # p3 = Point(p_min.x, p_min.y, p_max.z + c)
-    # p4 = Point(p_max.x + a, p_min.y, p_min.z)
+    # # p1 = Point(p_min.x - a, p_min.y - b, p_min.z - c)
+    # # p2 = Point(p_min.x, p_max.y + b, p_min.z)
+    # # p3 = Point(p_min.x, p_min.y, p_max.z + c)
+    # # p4 = Point(p_max.x + a, p_min.y, p_min.z)
 
     p1 = Point(0,0, 250)
     p2 = Point(-250,-250, -250)
@@ -315,7 +281,7 @@ def pointInsideSphere(p, tet):
     z2 = s.z
     distance = math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1)) 
 
-    # pnts = tet.points()
+    # pnts = te_t.points()
 
     # p3 = pnts[0]
     # p2 = pnts[1]
@@ -338,7 +304,7 @@ def pointInsideSphere(p, tet):
     # cy_ = y3-y0
 
     # return (
-    #     (ax_*ax_ + ay_*ay_) * (bx_*cy_-cx_*by_) -
+    #     (ax_*ax + ay_*ay_) * (bx_*cy_-cx_*by_) -
     #     (bx_*bx_ + by_*by_) * (ax_*cy_-cx_*ay_) +
     #     (cx_*cx_ + cy_*cy_) * (ax_*by_-bx_*ay_)
     # ) > 0
@@ -404,25 +370,7 @@ def createTetFromTrigAndPoint(trig, p):
     p2 = points[1]
     p3 = points[2]
 
-    # e1 = Edge([p1, p2])
-    # e2 = Edge([p2, p3])
-    # e2i = Edge([p3, p2])
-    # e3 = Edge([p3, p1])
-    # e3i = Edge([p1, p3])
-    # e4 = Edge([p, p1])
-    # e5 = Edge([p, p3])
-    # e5i = Edge([p3, p])
-    # e6 = Edge([p2, p])
-
-    # t1 = Triangle([e1, e2, e3]) #aristera
-    # t2 = Triangle([e1, e6, e4]) #kato
-    # t3 = Triangle([e6, e5, e2i]) #piso
-    # t4 = Triangle([e4, e3i, e5i]) #brosta
-
-    # e1 = Edge([edge.points[0], edge.points[1]])
-    # e2 = Edge([edge.points[1], point])
-    # e3 = Edge([point, edge.points[0]])
-    # t = Triangle([e1, e2, e3])
+    
 
     tet = Tetrahedron()
     tet.frompoints([p1,p2,p3,p])
@@ -441,27 +389,6 @@ def checkDelaunay(triangle):
                     print('Alert')
     return 1
 
-# Function 7:
-def calculateCircle(t):
-    pnts = t.points()
-    p1 = [pnts[0].x, pnts[0].y]
-    p2 = [pnts[1].x, pnts[1].y]
-    p3 = [pnts[2].x, pnts[2].y]
-
-    temp = p2[0] * p2[0] + p2[1] * p2[1]
-    bc = (p1[0] * p1[0] + p1[1] * p1[1] - temp) / 2
-    cd = (temp - p3[0] * p3[0] - p3[1] * p3[1]) / 2
-    det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1])
-
-    if abs(det) < 1.0e-6:
-        return (None, np.inf)
-
-    # Center of circle
-    cx = (bc*(p2[1] - p3[1]) - cd*(p1[1] - p2[1])) / det
-    cy = ((p1[0] - p2[0]) * cd - (p2[0] - p3[0]) * bc) / det
-
-    radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
-    return ((cx, cy), radius)
 
 #Find perpedicular line from 2 points
 def perpendicular(point1, point2):
@@ -539,29 +466,14 @@ def DelaunayTets(i):
     for tr in poly:
         T = createTetFromTrigAndPoint(tr, p)
         tets.append(T)
-    # Auto leipei kai isws ftaei poy den afaireitai to super trig
-    # for each triangle in triangulation // done inserting points, now clean up
-    #   if triangle contains a vertex from original super-triangle
-    #       remove triangle from triangulation
-    # return triangulation
+    
     # plt.cla()
 
     # Draw points
     # np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     # plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
 
-    # Draw triangles and circles (output can be manipulated from the comments)
-    #artists = []
-    #for t in trigs[:]:
-    #    trig_artist = t.toArtist()
-    #    artists.append(trig_artist)
-    #    plt.gca().add_patch(trig_artist)
-    #    c = Circle()
-    #    c.fromTriangle(t)
-    #    circ_artist = c.toArtist()
-    #    artists.append(circ_artist)
-    #    plt.gca().add_artist(circ_artist) # Circle drawing
-
+    
     
 
     
@@ -577,7 +489,7 @@ for a in arr:
     N= N+1
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-# filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 50.csv' 
+# filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
 
 
 # points = []
@@ -607,22 +519,7 @@ for a in arr:
 
 print('Number of points = ', N)
 
-# # Manual user input:
-# '''
-# points = []
-# N = int(input()) # Count of points
-# for i in range(N):
-#     xy = list(map(int, input().split(' ')[:2]))
-#     points.append(Point(xy[0], xy[1]))
-# '''
 
-# # Automatic input (20 random points)
-# '''
-# N = 20 # Count of points
-# points = list(map(lambda p: Point(p[0], p[1]), np.random.rand(N, 2)))
-# for p in points:
-#     p.x = p.x * 1.5
-# '''
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Get points before super triangle
@@ -787,22 +684,7 @@ print('Running Delaunay Triangulation')
 # ax.add_collection(lc)
 
 
-# # def init(): # ??????
-# #     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
-# #     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
-# #     return []
 
-
-
-                 
-# # ???
-
-
-# #fanim = animation.FuncAnimation(
-# #    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
-
-
-# #fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
 print('Results:')
