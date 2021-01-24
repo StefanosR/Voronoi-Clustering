@@ -207,7 +207,6 @@ def containsVertex(t1, t2):
     for v1 in t1.points():
         for v2 in t2.points():
             if v1.x == v2.x and v1.y == v2.y:
-                print("It works")
                 return 0
             break    
         break
@@ -240,7 +239,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp = [float(separated[7]), float(separated[8])]
         '''
         N +=1          # Number of points required for the plot/animation
-        print(temp)     # Prints our point coordinates in the output console  
+        # print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
 
