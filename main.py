@@ -148,17 +148,16 @@ def pointInsideCircumcircle(p, t):
     ) > 0
 
 # Function 3: Finds if a certain edge is shared with any triangle
-def isSharedEdge(edge, trigs, current_trig):
+def isSharedEdge(edge, trigs):
     shared_trigs = []
     for t in trigs:
-        if t!=current_trig:
-            for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
-                if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:  
-                    shared_trigs.append(t)
-                    return True , shared_trigs
-                elif e.points[0].x == edge.points[1].x and e.points[0].y == edge.points[1].y and e.points[1].x == edge.points[0].x and e.points[1].y == edge.points[0].y:
-                    shared_trigs.append(t)
-                    return True , shared_trigs
+        for e in t.edges:  # check if the vertices of the inserted edge are same with those of the triangle
+            if e.points[0].x == edge.points[0].x and e.points[0].y == edge.points[0].y and e.points[1].x == edge.points[1].x and e.points[1].y == edge.points[1].y:  
+                shared_trigs.append(t)
+                return True , shared_trigs
+            elif e.points[0].x == edge.points[1].x and e.points[0].y == edge.points[1].y and e.points[1].x == edge.points[0].x and e.points[1].y == edge.points[0].y:
+                shared_trigs.append(t)
+                return True , shared_trigs
 
     return False
 
@@ -280,7 +279,7 @@ def DelaunayTrigs(i):
         for e in b_t.edges:
             copied_bad_trigs = bad_trigs[:] # remove from bad_trigs the bad trig that we are investigating 
             copied_bad_trigs.remove(b_t)
-            flag  = isSharedEdge(e, copied_bad_trigs, b_t)
+            flag  = isSharedEdge(e, copied_bad_trigs)
             if not flag:
                 poly.append(e)
     for b_t in bad_trigs:
@@ -409,7 +408,7 @@ for t in trigs:
     flag3 = isContainPointsFromTrig(t,super_trig)
     if t!= super_trig and not flag3:
         for e in t.edges:
-            flag , vtrigs = isSharedEdge(e, trigs, t)
+            flag , vtrigs = isSharedEdge(e, trigs)
             if flag:
                 for t2 in vtrigs:
                     flag2 = isContainPointsFromTrig(t2,super_trig)
@@ -467,7 +466,7 @@ for t in trigs:
     flag3 = isContainPointsFromTrig(t,super_trig)
     if not flag3:
         for e in t.edges:
-            flag , vtrigs = isSharedEdge(e, trigs,t)
+            flag , vtrigs = isSharedEdge(e, trigs)
             if flag:
                 for t2 in vtrigs:
                     flag2 = isContainPointsFromTrig(t2,super_trig)
