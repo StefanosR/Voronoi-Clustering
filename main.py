@@ -563,7 +563,7 @@ axis.scatter(x1,y1,z1)
 #     verts.append(t.points)
 # axis.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
 
-super_tet.painttet()
+# super_tet.painttet()
 
 print('Running Delaunay Triangulation')
 
@@ -585,14 +585,16 @@ for i in range(4,N+4):
     # else: 
     #     tets.append(DelaunayTets(i))
 
+
 count = 0
 for t in tets:
     count+=1
+    t.painttet()
     # print("new tet")
     # for p in t.points():
     #     print("x=:",p.x, "y=:",p.y, "z=", p.z)
 
-print(count)
+print('Number of Delaunay tetrahedrons = ',count)
 
 # counter= 0
 # for t in trigs:
@@ -600,40 +602,42 @@ print(count)
 
 # print('Number of Delaunay triangles = ', counter)
 
-# print('Drawing Voronoi Cells')
+print('Drawing Voronoi Cells')
 
-# # Draw Voronoi cells
-# centersX = []
-# centersY=[]
-# v_edges = []
-# for t in trigs:
-#     flag3 = isContainPointsFromTrig(t,super_trig)
-#     if t!= super_trig and not flag3:
-#         for e in t.edges:
-#             flag , vtrigs = isSharedEdge(e, trigs)
-#             if flag:
-#                 for t2 in vtrigs:
-#                     flag2 = isContainPointsFromTrig(t2,super_trig)
-#                     if not flag2 and t2!=t:
-#                         c1 = Circle()
-#                         c2 = Circle()
-#                         c1.fromTriangle(t)
-#                         c2.fromTriangle(t2)
-#                         current_v_edge = [(c1.x , c1.y),(c2.x, c2.y)]
-#                         v_edges.append(current_v_edge)
-#                         #centre1 = Point(c1.x, c1.y)
-#                         #centre2 = Point(c2.x, c2.y)
-#                         #x = list(range(c1.x, c2.x))
-#                         #y = list(range(c1.y, c2.y))
-#                         x = [c1.x, c2.x]
-#                         y = [c1.y, c2.y]
-#                         centersX.append(c1.x)
-#                         centersY.append(c1.y)
-#                         plt.plot(x,y,'r')
-#                         #e1 = Edge([centre1, centre2])
-#                         #edge_artist = e1.toArtist()
-#                         #artists.append(edge_artist)
-#                         #plt.gca().add_patch(edge_artist)
+# Draw Voronoi cells
+centersX = []
+centersY=[]
+centersZ=[]
+v_edges = []
+v_trigs = []
+for t in tets:
+    flag3 = isContainPointsFromTrig(t,super_trig)
+    if t!= super_trig and not flag3:
+        for e in t.edges:
+            flag , vtrigs = isSharedEdge(e, trigs)
+            if flag:
+                for t2 in vtrigs:
+                    flag2 = isContainPointsFromTrig(t2,super_trig)
+                    if not flag2 and t2!=t:
+                        c1 = Circle()
+                        c2 = Circle()
+                        c1.fromTriangle(t)
+                        c2.fromTriangle(t2)
+                        current_v_edge = [(c1.x , c1.y),(c2.x, c2.y)]
+                        v_edges.append(current_v_edge)
+                        #centre1 = Point(c1.x, c1.y)
+                        #centre2 = Point(c2.x, c2.y)
+                        #x = list(range(c1.x, c2.x))
+                        #y = list(range(c1.y, c2.y))
+                        x = [c1.x, c2.x]
+                        y = [c1.y, c2.y]
+                        centersX.append(c1.x)
+                        centersY.append(c1.y)
+                        plt.plot(x,y,'r')
+                        #e1 = Edge([centre1, centre2])
+                        #edge_artist = e1.toArtist()
+                        #artists.append(edge_artist)
+                        #plt.gca().add_patch(edge_artist)
 
 
 # # Find Borders
