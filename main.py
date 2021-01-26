@@ -345,7 +345,7 @@ centersY=[]
 v_edges = []
 for t in trigs:
     flag3 = isContainPointsFromTrig(t,super_trig)
-    if t!= super_trig and not flag3:
+    if  not flag3:
         for e in t.edges:
             flag , vtrigs = isSharedEdge(e, trigs)
             if flag:
