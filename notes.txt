@@ -1,6 +1,6 @@
 Plan:
 
-1. Convert delaunay to 2d Voronoi:
+1. Create 2d Voronoi
 
         a)  Complete Delaunay triangulation // Not necessary
 
@@ -13,6 +13,8 @@ Plan:
             i. So, the edges of the Voronoi diagram are along the perpendicular bisectors of the edges of the Delaunay triangulation, so compute those lines.
             ii. Then, compute the vertices of the Voronoi diagram by finding the intersections of adjacent edges.
             iii. Finally, the edges are then the subsets of the lines you computed which lie between the corresponding vertices.
+        
+        c) Fix animation
 
 2. Create 3d Voronoi:
 
@@ -25,14 +27,13 @@ Plan:
     a) Να γράψουμε την αναφορά
     b) Προετοιμασία για παρουσίαση
 
-
 ------------------------------------------------------------------------------------
 
 Tasks:
 
-Mitsakos -> 1.b
-Sfatidis -> 1.b
-Stefanos -> 1.a + 3.a
-Kostas -> 1.a
+Mitsakos -> Delaunay + Voronoi
+Sfatidis -> Delaunay + Voronoi
+Stefanos -> Αναφορά + 3D
+Kostas -> Delaunay + Voronoi
 
-New meeting: 11-13/1 
+New meeting: 12-13/1 
