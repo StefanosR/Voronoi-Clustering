@@ -216,7 +216,7 @@ def find_voronoi_semi_lines(sites_table):
 
 # --------------------------------------Main-------------------------------------Main-----------------------------------
 
-filename = r'C:\Users\Στέφανος Ρήγας\Desktop\Fast Projects\Voronoi Projects\ZoulfosVoronoi\airports - 50.csv'
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\ProjectZoulf\airports - 50.csv'
 arr = []
 my_sites = []
 all_vectors = []
@@ -282,6 +282,6 @@ ax.add_collection(lc)
 ax.margins(0.1)
 
 plt.plot(x1, y1, "o")
-plt.plot(x2, y2, "o")
+#plt.plot(x2, y2, "o")
 
 plt.show()
