@@ -1,0 +1,44 @@
+7,Narsarsuaq Airport,Narssarssuaq,Greenland,UAK,BGBW,16,-173.4259987,112,-3,E,America/Godthab,airport,OurAirports,132
+8,Godthaab / Nuuk Airport,Godthaab,Greenland,GOH,BGGH,-59,26.57400131,283,-3,E,America/Godthab,airport,OurAirports,105
+9,Kangerlussuaq Airport,Sondrestrom,Greenland,SFJ,BGSF,20,-68.42599869,165,-3,E,America/Godthab,airport,OurAirports,-145
+10,Thule Air Base,Thule,Greenland,THU,BGTL,71,130.5740013,251,-4,E,America/Thule,airport,OurAirports,162
+11,Akureyri Airport,Akureyri,Iceland,AEY,BIAR,-52,123.5740013,6,0,N,Atlantic/Reykjavik,airport,OurAirports,109
+12,Egilsstaðir Airport,Egilsstadir,Iceland,EGS,BIEG,-45,77.57400131,76,0,N,Atlantic/Reykjavik,airport,OurAirports,-109
+13,Hornafjörður Airport,Hofn,Iceland,HFN,BIHN,5,44.57400131,24,0,N,Atlantic/Reykjavik,airport,OurAirports,71
+14,Húsavík Airport,Husavik,Iceland,HZK,BIHU,-38,-133.4259987,48,0,N,Atlantic/Reykjavik,airport,OurAirports,-59
+15,Ísafjörður Airport,Isafjordur,Iceland,IFJ,BIIS,63,-206.4259987,8,0,N,Atlantic/Reykjavik,airport,OurAirports,169
+16,Keflavik International Airport,Keflavik,Iceland,KEF,BIKF,46,11.57400131,171,0,N,Atlantic/Reykjavik,airport,OurAirports,-97
+17,Patreksfjörður Airport,Patreksfjordur,Iceland,PFJ,BIPA,-81,108.5740013,11,0,N,Atlantic/Reykjavik,airport,OurAirports,176
+18,Reykjavik Airport,Reykjavik,Iceland,RKV,BIRK,39,-17.42599869,48,0,N,Atlantic/Reykjavik,airport,OurAirports,131
+19,Siglufjörður Airport,Siglufjordur,Iceland,SIJ,BISI,-57,-60.42599869,10,0,N,Atlantic/Reykjavik,airport,OurAirports,-92
+20,Vestmannaeyjar Airport,Vestmannaeyjar,Iceland,VEY,BIVM,-38,-18.42599869,326,0,N,Atlantic/Reykjavik,airport,OurAirports,-71
+21,Sault Ste Marie Airport,Sault Sainte Marie,Canada,YAM,CYAM,59,-211.4259987,630,-5,A,America/Toronto,airport,OurAirports,91
+22,Winnipeg / St. Andrews Airport,Winnipeg,Canada,\N,CYAV,-59,-70.42599869,760,-6,A,America/Winnipeg,airport,OurAirports,47
+23,Halifax / CFB Shearwater Heliport,Halifax,Canada,\N,CYAW,-12,42.57400131,144,-4,A,America/Halifax,airport,OurAirports,76
+24,St. Anthony Airport,St. Anthony,Canada,YAY,CYAY,12,-90.42599869,108,-3.5,A,America/St_Johns,airport,OurAirports,174
+25,Tofino / Long Beach Airport,Tofino,Canada,YAZ,CYAZ,37,-118.4259987,80,-8,A,America/Vancouver,airport,OurAirports,155
+26,Kugaaruk Airport,Pelly Bay,Canada,YBB,CYBB,67,-170.4259987,56,-7,A,America/Edmonton,airport,OurAirports,-5
+27,Baie Comeau Airport,Baie Comeau,Canada,YBC,CYBC,-8,-34.42599869,71,-5,A,America/Toronto,airport,OurAirports,-162
+28,CFB Bagotville,Bagotville,Canada,YBG,CYBG,64,122.5740013,522,-5,A,America/Toronto,airport,OurAirports,102
+29,Baker Lake Airport,Baker Lake,Canada,YBK,CYBK,-69,20.57400131,59,-6,A,America/Winnipeg,airport,OurAirports,-76
+30,Campbell River Airport,Campbell River,Canada,YBL,CYBL,62,-98.42599869,346,-8,A,America/Vancouver,airport,OurAirports,25
+31,Brandon Municipal Airport,Brandon,Canada,YBR,CYBR,-67,43.57400131,1343,-6,A,America/Winnipeg,airport,OurAirports,124
+32,Cambridge Bay Airport,Cambridge Bay,Canada,YCB,CYCB,-43,-27.42599869,90,-7,A,America/Edmonton,airport,OurAirports,35
+33,Nanaimo Airport,Nanaimo,Canada,YCD,CYCD,20,22.57400131,92,-8,A,America/Vancouver,airport,OurAirports,141
+34,Castlegar/West Kootenay Regional Airport,Castlegar,Canada,YCG,CYCG,-12,-73.42599869,1624,-8,A,America/Vancouver,airport,OurAirports,106
+35,Miramichi Airport,Chatham,Canada,YCH,CYCH,-32,-80.42599869,108,-4,A,America/Halifax,airport,OurAirports,60
+36,Charlo Airport,Charlo,Canada,YCL,CYCL,79,43.57400131,132,-4,A,America/Halifax,airport,OurAirports,98
+37,Kugluktuk Airport,Coppermine,Canada,YCO,CYCO,-54,96.57400131,74,-7,A,America/Edmonton,airport,OurAirports,-26
+38,Coronation Airport,Coronation,Canada,YCT,CYCT,34,62.57400131,2595,-7,A,America/Edmonton,airport,OurAirports,26
+39,Chilliwack Airport,Chilliwack,Canada,YCW,CYCW,67,40.57400131,32,-8,A,America/Vancouver,airport,OurAirports,94
+40,Clyde River Airport,Clyde River,Canada,YCY,CYCY,85,-225.4259987,87,-5,A,America/Toronto,airport,OurAirports,137
+41,Coral Harbour Airport,Coral Harbour,Canada,YZS,CYZS,-83,128.5740013,210,-5,A,America/Coral_Harbour,airport,OurAirports,178
+42,Dawson City Airport,Dawson,Canada,YDA,CYDA,-69,-134.4259987,1215,-8,A,America/Vancouver,airport,OurAirports,-180
+43,Burwash Airport,Burwash,Canada,YDB,CYDB,-72,-126.4259987,2647,-8,A,America/Vancouver,airport,OurAirports,111
+44,Princeton Airport,Princeton,Canada,\N,CYDC,83,-17.42599869,2298,-8,A,America/Vancouver,airport,OurAirports,110
+45,Deer Lake Airport,Deer Lake,Canada,YDF,CYDF,5,100.5740013,72,-3.5,A,America/St_Johns,airport,OurAirports,-134
+46,Dease Lake Airport,Dease Lake,Canada,YDL,CYDL,-41,89.57400131,2600,-8,A,America/Vancouver,airport,OurAirports,-3
+47,Dauphin Barker Airport,Dauphin,Canada,YDN,CYDN,11,-181.4259987,999,-6,A,America/Winnipeg,airport,OurAirports,173
+48,Dawson Creek Airport,Dawson Creek,Canada,YDQ,CYDQ,27,-151.4259987,2148,-7,A,America/Dawson_Creek,airport,OurAirports,-95
+49,Edmonton International Airport,Edmonton,Canada,YEG,CYEG,-15,-22.42599869,2373,-7,A,America/Edmonton,airport,OurAirports,-93
+50,Arviat Airport,Eskimo Point,Canada,YEK,CYEK,83,-104.4259987,32,-6,A,America/Winnipeg,airport,OurAirports,-101
