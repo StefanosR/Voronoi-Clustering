@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import pylab as plt
+from mpl_toolkits.mplot3d import Axes3D 
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 import matplotlib.animation as animation
 from matplotlib import collections as mc
@@ -236,26 +237,27 @@ class Sphere:
 # Function 1: Calculates the super triangle
 def calculateSuperTetrahedron(points):
     # Find boundary box that contain all points
-    # p_min = Point(min(points, key=lambda p: p.x).x - 0.1,
-    #               min(points, key=lambda p: p.y).y - 0.1,
-    #               min(points, key=lambda p: p.z).z - 0.1,)
-    # p_max = Point(max(points, key=lambda p: p.x).x + 0.1,
-    #               max(points, key=lambda p: p.y).y + 0.1,
-    #               max(points, key=lambda p: p.z).z + 0.1)
+    p_min = Point(min(points, key=lambda p: p.x).x - 0.1,
+                  min(points, key=lambda p: p.y).y - 0.1,
+                  min(points, key=lambda p: p.z).z - 0.1,)
+    p_max = Point(max(points, key=lambda p: p.x).x + 0.1,
+                  max(points, key=lambda p: p.y).y + 0.1,
+                  max(points, key=lambda p: p.z).z + 0.1)
 
-    # a = p_max.x - p_min.x  # "distance" between max and min points
-    # b = p_max.y - p_min.y
-    # c = p_max.z - p_min.z
+    a = p_max.x - p_min.x  # "distance" between max and min points
+    b = p_max.y - p_min.y
+    c = p_max.z - p_min.z
 
+    d = 2*max(a,b,c)
     # # p1 = Point(p_min.x - a, p_min.y - b, p_min.z - c)
     # # p2 = Point(p_min.x, p_max.y + b, p_min.z)
     # # p3 = Point(p_min.x, p_min.y, p_max.z + c)
     # # p4 = Point(p_max.x + a, p_min.y, p_min.z)
 
-    p1 = Point(0,0, 250)
-    p2 = Point(-250,-250, -250)
-    p3 = Point(250,-250, -250)
-    p4 = Point(0,250, -250)
+    p1 = Point(0,0, d)
+    p2 = Point(-d,-d, -d)
+    p3 = Point(d,-d, -d)
+    p4 = Point(0,d, -d)
 
     points.insert(0, p1)
     points.insert(0, p2)
@@ -355,10 +357,10 @@ def isSharedTrig(trig, tets, current_tet):
     return False 
 
 # Function 4:
-def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
+def isContainPointsFromTet(t1, t2): # check if two trigs are sharing a node
     for p1 in t1.points():
         for p2 in t2.points():
-            if p1.x == p2.x and p1.y == p2.y:
+            if p1.x == p2.x and p1.y == p2.y and p1.z == p2.z:
                 return True
 
     return False
@@ -481,41 +483,42 @@ def DelaunayTets(i):
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
-arr = [(52, 12, 13.5), (13, 12, -2.6), (-21, 8, 2), (12, 10, 7), (13, 22, 6), (7, 11, -16), (-10, -5, 0), (-14, -3, 4), (20, 11, 8), (12, 4, 12)]
-points = []
-N=0 
-for a in arr:
-    points.append(Point(a[0],a[1],a[2]))
-    N= N+1
+# arr = [(52, 12, 13.5), (13, 12, -2.6), (-21, 8, 2), (12, 10, 7), (13, 22, 6), (7, 11, -16), (-10, -5, 0), (-14, -3, 4), (20, 11, 8), (12, 4, 12)]
+# points = []
+# N=0 
+# for a in arr:
+#     points.append(Point(a[0],a[1],a[2]))
+#     N= N+1
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-# filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50 - 3D.csv' 
 
 
-# points = []
-# N=0
-# with open(filename, 'r', encoding='utf8') as csvfile:
-#     for line in csvfile:
-#         separated = line.split(',')
-#         # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
-#         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
-#         temp1 = float(separated[6])
-#         temp2 = float(separated[7])
-#         temp = [float(separated[6]), float(separated[7])]
-#         '''
-#         try:
-#             temp1 = float(separated[5])
-#             temp2 = float(separated[6])
-#             temp = [float(separated[5]), float(separated[6])]
-#         except ValueError:
-#             temp1 = float(separated[7])
-#             temp2 = float(separated[8])
-#             temp = [float(separated[7]), float(separated[8])]
-#         '''
-#         N = N+1    # Number of points required for the plot/animation
-#         #print(temp)     # Prints our point coordinates in the output console  
-#         # Appends the scanned points into the point array as data of the Point Class
-#         points.append(Point(temp1,temp2))
+points = []
+N=0
+with open(filename, 'r', encoding='utf8') as csvfile:
+    for line in csvfile:
+        separated = line.split(',')
+        # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
+        # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
+        temp1 = float(separated[6])
+        temp2 = float(separated[7])
+        temp3 = float(separated[14])
+        temp = [float(separated[6]), float(separated[7]), float(separated[14])]
+        '''
+        try:
+            temp1 = float(separated[5])
+            temp2 = float(separated[6])
+            temp = [float(separated[5]), float(separated[6])]
+        except ValueError:
+            temp1 = float(separated[7])
+            temp2 = float(separated[8])
+            temp = [float(separated[7]), float(separated[8])]
+        '''
+        N = N+1    # Number of points required for the plot/animation
+        #print(temp)     # Prints our point coordinates in the output console  
+        # Appends the scanned points into the point array as data of the Point Class
+        points.append(Point(temp1,temp2,temp3))
 
 print('Number of points = ', N)
 
@@ -529,6 +532,20 @@ print('Number of points = ', N)
 #     X1.append(z.x) 
 #     Y1.append(z.y)
 
+
+ # Draw points
+x1 = []
+y1 = []
+z1 = []
+for p in points:
+    x1.append(p.x)
+    y1.append(p.y)
+    z1.append(p.z)
+    
+fig = plt.figure()
+axis = fig.add_subplot(111, projection='3d')
+axis.scatter(x1,y1,z1)
+
 # Calculate SuperTetrahedron
 super_tet = calculateSuperTetrahedron(points) 
 tets = [super_tet]
@@ -538,24 +555,16 @@ for p in super_tet.points():
     stpoints.append(p)
     # print("Printing at end",p.x, p.y, p.z)
  
+
 # for t in super_tet.triangles:
 #     print("\n")
 #     for e in t.points():
 #         print(e.x,e.y,e.z)
 
 
-x1 = []
-y1 = []
-z1 = []
-for p in points:
-    x1.append(p.x)
-    y1.append(p.y)
-    z1.append(p.z)
 
-# Draw points
-fig = plt.figure()
-axis = fig.add_subplot(111, projection='3d')
-axis.scatter(x1,y1,z1)
+
+
 
 # verts =[]
 
@@ -589,7 +598,7 @@ for i in range(4,N+4):
 count = 0
 for t in tets:
     count+=1
-    t.painttet()
+    # t.painttet()
     # print("new tet")
     # for p in t.points():
     #     print("x=:",p.x, "y=:",p.y, "z=", p.z)
@@ -604,36 +613,47 @@ print('Number of Delaunay tetrahedrons = ',count)
 
 print('Drawing Voronoi Cells')
 
+# xs = [points[5].x, points[6].x]
+# ys = [points[5].y, points[6].y]
+# zs = [points[5].z, points[6].z]
+# Axes3D.plot(axis, xs, ys,zs,"r")
+
+
 # Draw Voronoi cells
 centersX = []
 centersY=[]
 centersZ=[]
 v_edges = []
 v_trigs = []
-for t in tets:
-    flag3 = isContainPointsFromTrig(t,super_trig)
-    if t!= super_trig and not flag3:
-        for e in t.edges:
-            flag , vtrigs = isSharedEdge(e, trigs)
+count15=0
+# for tetr in tets:
+for j in range(0,1):
+    tetr=tets[j]
+    count15+=1
+    print(count15)
+    flag3 = isContainPointsFromTet(tetr,super_tet)
+    if  not flag3:
+        for trig in tetr.triangles:
+            flag , shared_tet = isSharedTrig(trig, tets, tetr)
             if flag:
-                for t2 in vtrigs:
-                    flag2 = isContainPointsFromTrig(t2,super_trig)
-                    if not flag2 and t2!=t:
-                        c1 = Circle()
-                        c2 = Circle()
-                        c1.fromTriangle(t)
-                        c2.fromTriangle(t2)
-                        current_v_edge = [(c1.x , c1.y),(c2.x, c2.y)]
+                for tetr2 in shared_tet:
+                    flag2 = isContainPointsFromTet(tetr2,super_tet)
+                    if not flag2 and tetr!=tetr2:
+                        c1 = Sphere()
+                        c2 = Sphere()
+                        c1.fromTetrahedron(tetr)
+                        c2.fromTetrahedron(tetr2)
+                        current_v_edge = [(c1.x , c1.y, c1.z),(c2.x, c2.y, c2.z)]
                         v_edges.append(current_v_edge)
-                        #centre1 = Point(c1.x, c1.y)
-                        #centre2 = Point(c2.x, c2.y)
-                        #x = list(range(c1.x, c2.x))
-                        #y = list(range(c1.y, c2.y))
-                        x = [c1.x, c2.x]
-                        y = [c1.y, c2.y]
-                        centersX.append(c1.x)
-                        centersY.append(c1.y)
-                        plt.plot(x,y,'r')
+                        xs = [c1.x, c2.x]
+                        ys = [c1.y, c2.y]
+                        zs = [c1.z, c2.z]
+                        Axes3D.plot(axis, xs, ys,zs,"r")
+                        # x = [c1.x, c2.x]
+                        # y = [c1.y, c2.y]
+                        # centersX.append(c1.x)
+                        # centersY.append(c1.y)
+                        # plt.plot(x,y,'r')
                         #e1 = Edge([centre1, centre2])
                         #edge_artist = e1.toArtist()
                         #artists.append(edge_artist)
