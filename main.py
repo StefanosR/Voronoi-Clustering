@@ -149,14 +149,14 @@ class Sphere:
     # Create Sphere
     def fromTetrahedron(self, tet):
         pnts = tet.points()
-        for p in points:
-            print("Point:",p.x, p.y, p.z)
+        # for p in pnts:
+        #     print("Point:",p.x, p.y, p.z)
         
         p1 = [pnts[0].x, pnts[0].y, pnts[0].z]
         p2 = [pnts[1].x, pnts[1].y, pnts[1].z]
         p3 = [pnts[2].x, pnts[2].y, pnts[2].z]
         p4 = [pnts[3].x, pnts[3].y, pnts[3].z]
-        print("points of tet:", p1, p2 , p3, p4)
+        # print("points of tet:", p1, p2 , p3, p4)
         
         # Math
         t1 = - (p1[0]*p1[0] + p1[1]*p1[1] + p1[2]*p1[2])
@@ -164,7 +164,7 @@ class Sphere:
         t3 = - (p3[0]*p3[0] + p3[1]*p3[1] + p3[2]*p3[2])
         t4 = - (p4[0]*p4[0] + p4[1]*p4[1] + p4[2]*p4[2])
 
-        print(" t1 = ",t1," t2 = ",t2," t3 = ",t3," t4 = ",t4,)
+        # print(" t1 = ",t1," t2 = ",t2," t3 = ",t3," t4 = ",t4,)
 
         #Define arrays for dets
         T = np.array([[p1[0], p1[1], p1[2], 1],
@@ -173,7 +173,7 @@ class Sphere:
                      [p4[0], p4[1], p4[2], 1]])
         
         detT = np.linalg.det(T)
-        print("T = ", detT)
+        # print("T = ", detT)
         
         D = np.array([[t1, p1[1], p1[2], 1],
                      [t2, p2[1], p2[2], 1], 
@@ -181,7 +181,7 @@ class Sphere:
                      [t4, p4[1], p4[2], 1]])
 
         detD = np.linalg.det(D)
-        print("D = ",detD)
+        # print("D = ",detD)
         detD = detD / detT
 
 
@@ -192,7 +192,7 @@ class Sphere:
         
         detE = np.linalg.det(E)
         detE = detE / detT
-        print("E = ",detE)
+        # print("E = ",detE)
 
         F = np.array([[p1[0], p1[1], t1, 1],
                      [p2[0], p2[1], t2, 1], 
@@ -208,7 +208,7 @@ class Sphere:
                      [p4[0], p4[1], p4[2], t4]])
         
         detG = np.linalg.det(G)
-        print("G = ",detG)
+        # print("G = ",detG)
         detG = detG / detT
         
         self.x = -detD / 2
@@ -365,15 +365,14 @@ def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
 
 # Function 5:
 def createTetFromTrigAndPoint(trig, p):
-    points = trig.points()
-    p1 = points[0]
-    p2 = points[1]
-    p3 = points[2]
+    tpoints = trig.points()
+    p1 = tpoints[0]
+    p2 = tpoints[1]
+    p3 = tpoints[2]
 
     
-
     tet = Tetrahedron()
-    tet.frompoints([p1,p2,p3,p])
+    tet.frompoints([p,p1,p2,p3])
    
     return tet
 
@@ -449,6 +448,7 @@ def number_of_intersections(line, line_table):
 def DelaunayTets(i):
     print("LOOP:", i)
     p = points[i]
+    print("point which we add:", p.x,p.y,p.z)
     bad_tets = []
     for tet in tets:
         if pointInsideSphere(p, tet):  # first find all the triangles that are no longer valid due to the insertion
@@ -536,7 +536,7 @@ tets = [super_tet]
 stpoints =[]
 for p in super_tet.points():
     stpoints.append(p)
-    print("Printing at end",p.x, p.y, p.z)
+    # print("Printing at end",p.x, p.y, p.z)
  
 # for t in super_tet.triangles:
 #     print("\n")
@@ -578,12 +578,21 @@ print('Running Delaunay Triangulation')
 
 
 
-# DelaunayTets(1)
-# for i in range(1,N):
-#     if 1<N:
-#         DelaunayTets(i)
-#     else: 
-#         tets.append(DelaunayTets(i))
+# DelaunayTets(4)
+for i in range(4,N+4):
+    # if i<N+2:
+    DelaunayTets(i)
+    # else: 
+    #     tets.append(DelaunayTets(i))
+
+count = 0
+for t in tets:
+    count+=1
+    # print("new tet")
+    # for p in t.points():
+    #     print("x=:",p.x, "y=:",p.y, "z=", p.z)
+
+print(count)
 
 # counter= 0
 # for t in trigs:
