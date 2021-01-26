@@ -278,7 +278,7 @@ def DelaunayTrigs(i):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\Ski_Areas_NA.csv' 
+filename = r'C:\Users\Στέφανος Ρήγας\Desktop\Fast Projects\Voronoi Projects\Voronoi-Clustering\airports-10.csv' 
 
 points = []
 N=0
