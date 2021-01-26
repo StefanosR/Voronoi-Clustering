@@ -6,8 +6,6 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-
-
 # Info 
 # Algorithm: Delaunay Triangulation
 # List triangulation
@@ -486,7 +484,7 @@ points = []
 N=0 
 for a in arr:
     points.append(Point(a[0],a[1],a[2]))
-    N= N+1
+    N = N+1
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
 # filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
@@ -519,8 +517,6 @@ for a in arr:
 
 print('Number of points = ', N)
 
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Get points before super triangle
 # X1 = [] 
@@ -542,7 +538,6 @@ for p in super_tet.points():
 #     print("\n")
 #     for e in t.points():
 #         print(e.x,e.y,e.z)
-
 
 x1 = []
 y1 = []
