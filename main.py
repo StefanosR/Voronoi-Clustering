@@ -483,42 +483,42 @@ def DelaunayTets(i):
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
-# arr = [(52, 12, 13.5), (13, 12, -2.6), (-21, 8, 2), (12, 10, 7), (13, 22, 6), (7, 11, -16), (-10, -5, 0), (-14, -3, 4), (20, 11, 8), (12, 4, 12)]
-# points = []
-# N=0 
-# for a in arr:
-#     points.append(Point(a[0],a[1],a[2]))
-#     N= N+1
-
-# Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50 - 3D.csv' 
-
-
+arr = [(52, 12, 13.5), (13, 12, -2.6), (-21, 8, 2), (12, 10, 7), (13, 22, 6), (7, 11, -16), (-10, -5, 0), (-14, -3, 4), (20, 11, 8), (12, 4, 12)]
 points = []
-N=0
-with open(filename, 'r', encoding='utf8') as csvfile:
-    for line in csvfile:
-        separated = line.split(',')
-        # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
-        # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
-        temp1 = float(separated[6])
-        temp2 = float(separated[7])
-        temp3 = float(separated[14])
-        temp = [float(separated[6]), float(separated[7]), float(separated[14])]
-        '''
-        try:
-            temp1 = float(separated[5])
-            temp2 = float(separated[6])
-            temp = [float(separated[5]), float(separated[6])]
-        except ValueError:
-            temp1 = float(separated[7])
-            temp2 = float(separated[8])
-            temp = [float(separated[7]), float(separated[8])]
-        '''
-        N = N+1    # Number of points required for the plot/animation
-        #print(temp)     # Prints our point coordinates in the output console  
-        # Appends the scanned points into the point array as data of the Point Class
-        points.append(Point(temp1,temp2,temp3))
+N=0 
+for a in arr:
+    points.append(Point(a[0],a[1],a[2]))
+    N= N+1
+
+# # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
+# filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50 - 3D.csv' 
+
+
+# points = []
+# N=0
+# with open(filename, 'r', encoding='utf8') as csvfile:
+#     for line in csvfile:
+#         separated = line.split(',')
+#         # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
+#         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
+#         temp1 = float(separated[6])
+#         temp2 = float(separated[7])
+#         temp3 = float(separated[14])
+#         temp = [float(separated[6]), float(separated[7]), float(separated[14])]
+#         '''
+#         try:
+#             temp1 = float(separated[5])
+#             temp2 = float(separated[6])
+#             temp = [float(separated[5]), float(separated[6])]
+#         except ValueError:
+#             temp1 = float(separated[7])
+#             temp2 = float(separated[8])
+#             temp = [float(separated[7]), float(separated[8])]
+#         '''
+#         N = N+1    # Number of points required for the plot/animation
+#         #print(temp)     # Prints our point coordinates in the output console  
+#         # Appends the scanned points into the point array as data of the Point Class
+#         points.append(Point(temp1,temp2,temp3))
 
 print('Number of points = ', N)
 
@@ -626,9 +626,9 @@ centersZ=[]
 v_edges = []
 v_trigs = []
 count15=0
-# for tetr in tets:
-for j in range(0,1):
-    tetr=tets[j]
+for tetr in tets:
+# for j in range(0,1):
+#     tetr=tets[j]
     count15+=1
     print(count15)
     flag3 = isContainPointsFromTet(tetr,super_tet)
