@@ -170,17 +170,6 @@ def createTrigFromEdgeAndPoint(edge, point):
     return t
 
 # Function 6:
-def checkDelaunay(triangle):
-    for e in triangle.edges:
-        for t in e.trigs:
-            if t == triangle:
-                continue
-            for p in t.points():
-                if pointInsideCircumcircle(p, triangle):
-                    print('Alert')
-    return 1
-
-# Function 7:
 def calculateCircle(t):
     pnts = t.points()
     p1 = [pnts[0].x, pnts[0].y]
@@ -202,7 +191,7 @@ def calculateCircle(t):
     radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
     return ((cx, cy), radius)
 
-# Function 8: Whether a triangle contains a vertex from original super-triangle
+# Function 7: Whether a triangle contains a vertex from original super-triangle
 def containsVertex(t1, t2):
     for v1 in t1.points():
         for v2 in t2.points():

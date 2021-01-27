@@ -58,7 +58,7 @@ class Triangle:
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), self.points())))
         return plt.Polygon(points[:3, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
 
-#Describes the Tetrahedron class
+# Describes the Tetrahedron class
 class Tetrahedron:
     def __init__(self, triangles=[]):
         self.triangles = triangles
@@ -150,7 +150,7 @@ class Sphere:
     def fromTetrahedron(self, tet):
         pnts = tet.points()
         # for p in pnts:
-        #     print("Point:",p.x, p.y, p.z)
+        # print("Point:",p.x, p.y, p.z)
         
         p1 = [pnts[0].x, pnts[0].y, pnts[0].z]
         p2 = [pnts[1].x, pnts[1].y, pnts[1].z]
@@ -166,7 +166,7 @@ class Sphere:
 
         # print(" t1 = ",t1," t2 = ",t2," t3 = ",t3," t4 = ",t4,)
 
-        #Define arrays for dets
+        # Define arrays for dets
         T = np.array([[p1[0], p1[1], p1[2], 1],
                      [p2[0], p2[1], p2[2], 1], 
                      [p3[0], p3[1], p3[2], 1],
@@ -233,7 +233,7 @@ class Sphere:
         # return True
 
 
-# Function 1: Calculates the super triangle
+# Function 1: Calculates the super tetrahedron
 def calculateSuperTetrahedron(points):
     # Find boundary box that contain all points
     p_min = Point(min(points, key=lambda p: p.x).x - 0.1,
@@ -262,7 +262,6 @@ def calculateSuperTetrahedron(points):
     points.insert(0, p2)
     points.insert(0, p3)
     points.insert(0, p4)
-
     
     t = Tetrahedron()
     t.frompoints([p1,p2,p3,p4])
@@ -356,12 +355,11 @@ def isSharedTrig(trig, tets, current_tet):
     return False 
 
 # Function 4:
-def isContainPointsFromTet(t1, t2): # check if two trigs are sharing a node
+def isContainPointsFromTet(t1, t2): # check if two tets are sharing a node
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y and p1.z == p2.z:
                 return True
-
     return False
 
 # Function 5:
@@ -371,26 +369,12 @@ def createTetFromTrigAndPoint(trig, p):
     p2 = tpoints[1]
     p3 = tpoints[2]
 
-    
     tet = Tetrahedron()
     tet.frompoints([p,p1,p2,p3])
    
     return tet
 
-
-# Function 6:
-def checkDelaunay(triangle):
-    for e in triangle.edges:
-        for t in e.trigs:
-            if t == triangle:
-                continue
-            for p in t.points():
-                if pointInsideCircumcircle(p, triangle):
-                    print('Alert')
-    return 1
-
-
-#Find perpedicular line from 2 points
+# Find perpedicular line from 2 points
 def perpendicular(point1, point2):
     m_x = (point1.x + point2.x) / 2
     m_y = (point1.y + point2.y) / 2
@@ -408,7 +392,7 @@ def perpendicular(point1, point2):
 
     return a, b
 
-#Find intersection point of 2 lines
+# Find intersection point of 2 lines
 def intersection(line1, line2):
     if line1[0] is None:
         if line2[0] is None:
@@ -426,14 +410,14 @@ def intersection(line1, line2):
 
     return x0, y0
 
-#Check if point is inside boundaries
+# Check if point is inside boundaries
 def in_boundaries(this_point):
     if b2 <= this_point[0] <= b1:
         if b4 <= this_point[1] <= b3:
             return True
     return False
 
-#Number of intersections of a line with any edge
+# Number of intersections of a line with any edge
 def number_of_intersections(line, line_table):
     count = 0
     e1 = LineString([line[0], line[1]])
@@ -443,7 +427,6 @@ def number_of_intersections(line, line_table):
             count += 1
 
     return count
-
 
 # Find Delaunay Triangulation, exactly as in Wiki
 def DelaunayTets(i):
@@ -473,11 +456,7 @@ def DelaunayTets(i):
     # Draw points
     # np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     # plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
-
-    
-    
-
-    
+      
     return  tets
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -521,8 +500,6 @@ for a in arr:
 
 print('Number of points = ', N)
 
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Get points before super triangle
 # X1 = [] 
@@ -532,7 +509,7 @@ print('Number of points = ', N)
 #     Y1.append(z.y)
 
 
- # Draw points
+# Draw points
 x1 = []
 y1 = []
 z1 = []
@@ -559,10 +536,6 @@ for p in super_tet.points():
 #     print("\n")
 #     for e in t.points():
 #         print(e.x,e.y,e.z)
-
-
-
-
 
 
 # verts =[]

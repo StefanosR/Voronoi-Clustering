@@ -4,7 +4,7 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-# Info -> Reminder to change opening comments
+# Info -> Reminder to fix the steps below (mitsakos)
 
 # Algorithm: Delaunay Triangulation
 # List triangulation
@@ -177,18 +177,6 @@ def createTrigFromEdgeAndPoint(edge, point):
     t = Triangle([e1, e2, e3])
 
     return t
-
-# Function 6:
-def checkDelaunay(triangle):
-    for e in triangle.edges:
-        for t in e.trigs:
-            if t == triangle:
-                continue
-            for p in t.points():
-                if pointInsideCircumcircle(p, triangle):
-                    print('Alert')
-    return 1
-
 
 #Find perpedicular line from 2 points
 def perpendicular(point1, point2):

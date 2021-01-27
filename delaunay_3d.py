@@ -377,19 +377,6 @@ def createTetFromTrigAndPoint(trig, p):
    
     return tet
 
-
-# Function 6:
-def checkDelaunay(triangle):
-    for e in triangle.edges:
-        for t in e.trigs:
-            if t == triangle:
-                continue
-            for p in t.points():
-                if pointInsideCircumcircle(p, triangle):
-                    print('Alert')
-    return 1
-
-
 #Find perpedicular line from 2 points
 def perpendicular(point1, point2):
     m_x = (point1.x + point2.x) / 2
