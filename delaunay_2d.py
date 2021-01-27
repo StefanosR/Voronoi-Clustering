@@ -205,7 +205,7 @@ def containsVertex(t1, t2):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\Ski_Areas_NA.csv' 
+filename = r'C:\Users\Στέφανος Ρήγας\Desktop\Fast Projects\Voronoi Projects\Voronoi-Clustering\airports - 10.csv' 
 
 points = []
 N=0
@@ -214,9 +214,9 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         separated = line.split(',')
         # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
-        temp1 = float(separated[0])
-        temp2 = float(separated[1])
-        temp = [float(separated[0]), float(separated[1])]
+        temp1 = float(separated[6])
+        temp2 = float(separated[7])
+        temp = [float(separated[6]), float(separated[7])]
         '''
         try:
             temp1 = float(separated[6])
