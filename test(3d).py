@@ -21,12 +21,12 @@ ax = fig_drone_3d.add_subplot(111, projection = '3d')
 
 for ridge_indices in vor.ridge_vertices:
     voronoi_ridge_coords = vor.vertices[ridge_indices]
-    ax.plot(voronoi_ridge_coords[...,0], voronoi_ridge_coords[...,1], voronoi_ridge_coords[...,2], lw=2, c = 'blue', alpha=0.2)
+    ax.plot(voronoi_ridge_coords[...,0], voronoi_ridge_coords[...,1], voronoi_ridge_coords[...,2], lw=2, c = 'green', alpha=0.2)
     
 vor_vertex_coords = vor.vertices
 
 # obstacles
-ax.scatter(air_traffic_mess[...,0], air_traffic_mess[...,1], air_traffic_mess[...,2], c= 'k', label='obstacles', edgecolor='none')
+# ax.scatter(air_traffic_mess[...,0], air_traffic_mess[...,1], air_traffic_mess[...,2], c= 'k', label='obstacles', edgecolor='none')
 
 ax.scatter(vor_vertex_coords[...,0], vor_vertex_coords[...,1], vor_vertex_coords[...,2], c= 'orange', label='Voronoi vertices',edgecolors='white', marker = 'o', alpha = 0.9)
 
