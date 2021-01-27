@@ -18,6 +18,7 @@ from shapely.geometry import  LineString
 # 3. Find all edges that are between bad triangle and good triangle
 # 4. Construct new triangles with the edges
 # 5. Remove bad triangles
+# 6. Repeat until no more points can be added
 # 7. Remove all triangles that have a vertex from the super triangle
 
 # For transforming Delauney -> Voronoi: (UPDATE HERE)
