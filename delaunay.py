@@ -166,7 +166,6 @@ def createTrigFromEdgeAndPoint(edge, point):
     e2 = Edge([edge.points[1], point])
     e3 = Edge([point, edge.points[0]])
     t = Triangle([e1, e2, e3])
-
     return t
 
 # Function 6:
