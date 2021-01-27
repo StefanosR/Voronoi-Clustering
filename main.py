@@ -1,6 +1,7 @@
 import numpy as np
 import pylab as plt
 import matplotlib.animation as animation
+from shapely.geometry import LineString
 
 
 
@@ -215,10 +216,10 @@ def calculateCircle(t):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\giorg\Documents\GitHub\Voronoi-Clustering\Project Zoulf\airports - 100.csv' 
+filename = r'C:\Users\giorg\Documents\GitHub\Voronoi-Clustering\airports - 200.csv' 
 
 points = []
-
+N = 0
 with open(filename, 'r', encoding='utf8') as csvfile:
     for line in csvfile:
         separated = line.split(',')
@@ -236,9 +237,9 @@ with open(filename, 'r', encoding='utf8') as csvfile:
             temp1 = float(separated[7])
             temp2 = float(separated[8])
             temp = [float(separated[7]), float(separated[8])]
-        '''
-        N = 50     # Number of points required for the plot/animation
-        print(temp)     # Prints our point coordinates in the output console  
+        
+        N = N+1     # Number of points required for the plot/animation
+        # print(temp)     # Prints our point coordinates in the output console  
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
 
@@ -257,7 +258,7 @@ N = 20 # Count of points
 points = list(map(lambda p: Point(p[0], p[1]), np.random.rand(N, 2)))
 for p in points:
     p.x = p.x * 1.5
-'''
+
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 X1 = [] 
@@ -318,9 +319,6 @@ def animate(i):
     #    circ_artist = c.toArtist()
     #    artists.append(circ_artist)
     #    plt.gca().add_artist(circ_artist) # Circle drawing
-
-    
-
     
     return  trigs
 
@@ -336,7 +334,7 @@ ax = fig.add_subplot(111, aspect='equal') # Αυτό βασικά μπορούμ
 #fanim = animation.FuncAnimation(
 #    fig, animate, init_func=init, frames=N + 3, interval=100, blit=True)
 
-for i in range(1,N + 3):
+for i in range(1,N+3):
     if 1<N+3:
         animate(i)
     else: 
@@ -351,11 +349,11 @@ for t in trigs:
     y1= (t.edges[0].points[0].y)
     y2= (t.edges[1].points[0].y)
     y3= (t.edges[2].points[0].y)
-    print(x1,y1)
-    print(x2,y2)
-    print(x3,y3)
+    # print(x1,y1)
+    # print(x2,y2)
+    # print(x3,y3)
 
-print(counter)
+# print(counter)
 #draw Voronoi
 #artists = []
 centersX = []
@@ -386,37 +384,36 @@ for t in trigs:
                         #artists.append(edge_artist)
                         #plt.gca().add_patch(edge_artist)
 
-#einai ta simeia toy csv
-
 #voronoi
 x2 = []
 y2 = []
-
 for i in centersX:
     x2.append(i)
 for i in centersY:
     y2.append(i)
 
-b1 = max(max(X1), max(x2)) + 100 #max x
-b2 = min(min(X1), min(x2)) - 100 #min x
-b3 = max(max(Y1), max(y2)) +100 #max y
-b4 = min(min(Y1), min(y2)) -100 #min y
+#x boundaries
+b1 = max(max(X1), max(x2)) 
+b2 = min(min(X1), min(x2)) 
+addx = abs(b2-b1) * 0.1
+b1 = b1 + addx
+b2 = b2 - addx
+
+# y boundaries
+b3 = max(max(Y1), max(y2)) 
+b4 = min(min(Y1), min(y2)) 
+addy = abs(b3-b4) * 0.1
+b3 = b3 + addy
+b4 = b4 - addy
+
+#final boundaries
 boundaries = [(0, b3), (0, b4), (None, b1), (None, b2)]
+x_borders = [b1, b1, b2, b2, b1]
+y_borders = [b3, b4, b4, b3, b3]
+plt.plot(x_borders, y_borders,'g')
+
 
 # Saves the results in gif:
-
-x1 = [b1, b1]
-y1 = [b3, b4]
-plt.plot(x1,y1,'g')
-x2 = [b2, b2]
-y2 = [b3, b4]
-plt.plot(x2,y2,'g')
-x3 = [b1, b2]
-y3 = [b3, b3]
-plt.plot(x3,y3,'g')
-x4 = [b1, b2]
-y4 = [b4, b4]
-plt.plot(x4,y4,'g')
 #fanim.save('triangulation.gif', writer='pillow') 
 
 # Outputs the results in a window
