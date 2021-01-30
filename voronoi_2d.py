@@ -15,7 +15,7 @@ from shapely.geometry import  LineString
 # 6. Repeat until no more points can be added.
 # 7. Remove all triangles that have a vertex from the super triangle.
 
-# For transforming Delaunay -> 
+# For transforming Delaunay -> Voronoi
 # 1. Find all the circumcenters of the triangles. These are the voronoi points
 # 2. Connect adjacent triangle circumcenters with edge.
 # 3. For semilines, find the shared edge between a triangle with one that has 

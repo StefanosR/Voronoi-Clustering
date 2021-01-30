@@ -7,8 +7,6 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-
-
 # Info 
 # Algorithm: Delaunay Tetrahedration
 # Add tetrahedron that envelops all the points in the tetrahedration list
@@ -26,7 +24,6 @@ from shapely.geometry import  LineString
 # 3. For semilines, find the shared face between a tetrahedron with one that has 
 #    a shared point with the super triangle. Create a semiline starting from the circumcenter of the triangle
 #    perpendicular to the shared triangle.
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points
@@ -61,7 +58,7 @@ class Triangle:
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), self.points())))
         return plt.Polygon(points[:3, :], color='C0', alpha=0.8, fill=False, clip_on=True, linewidth=1)
 
-#Describes the Tetrahedron class
+# Describes the Tetrahedron class
 class Tetrahedron:
     # Initialize a Tetrahedron
     def __init__(self, triangles=[]):
@@ -95,7 +92,7 @@ class Tetrahedron:
         self.triangles =[t0,t1,t2,t3]
         return True
 
-    #Return the edges of the tetrahedron
+    # Return the edges of the tetrahedron
     def edges(self):
         edges=[]
         for t in self.triangles:
@@ -116,7 +113,7 @@ class Tetrahedron:
         # print("end")              
         return edges
     
-    #Return the points of the tetrahedron
+    # Return the points of the tetrahedron
     def points(self):
         points=[]
         
@@ -135,7 +132,7 @@ class Tetrahedron:
                 # print("added first 2 points", points[0].x,  points[0].y,  points[0].z,  points[1].x,  points[1].y,  points[1].z )
         return points
 
-    #Paint tetrahedron
+    # Paint tetrahedron
     def painttet(self):
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y,p.z]), self.points())))
         verts= [ [points[0], points[1], points[2]],
@@ -173,7 +170,7 @@ class Sphere:
 
         # print(" t1 = ",t1," t2 = ",t2," t3 = ",t3," t4 = ",t4,)
 
-        #Define arrays for dets
+        # Define arrays for dets
         T = np.array([[p1[0], p1[1], p1[2], 1],
                      [p2[0], p2[1], p2[2], 1], 
                      [p3[0], p3[1], p3[2], 1],
@@ -358,7 +355,6 @@ def isSharedTrig(trig, tets, current_tet):
             if flag:
                 shared_tets.append(tet)
                 return True , shared_tets   
-
     return False 
 
 # Function 4: check if two tetrahedrons are sharing a node
@@ -377,13 +373,12 @@ def createTetFromTrigAndPoint(trig, p):
     p2 = tpoints[1]
     p3 = tpoints[2]
 
-    
     tet = Tetrahedron()
     tet.frompoints([p,p1,p2,p3])
    
     return tet
 
-#Find perpedicular line from 2 points
+# Find perpedicular line from 2 points
 def perpendicular(point1, point2):
     m_x = (point1.x + point2.x) / 2
     m_y = (point1.y + point2.y) / 2
@@ -401,7 +396,7 @@ def perpendicular(point1, point2):
 
     return a, b
 
-#Find intersection point of 2 lines
+# Find intersection point of 2 lines
 def intersection(line1, line2):
     if line1[0] is None:
         if line2[0] is None:
@@ -419,14 +414,14 @@ def intersection(line1, line2):
 
     return x0, y0
 
-#Check if point is inside boundaries
+# Check if point is inside boundaries
 def in_boundaries(this_point):
     if b2 <= this_point[0] <= b1:
         if b4 <= this_point[1] <= b3:
             return True
     return False
 
-#Number of intersections of a line with any edge
+# Number of intersections of a line with any edge
 def number_of_intersections(line, line_table):
     count = 0
     e1 = LineString([line[0], line[1]])
@@ -436,7 +431,6 @@ def number_of_intersections(line, line_table):
             count += 1
 
     return count
-
 
 # Find Delaunay Triangulation
 def DelaunayTets(i):
@@ -467,10 +461,6 @@ def DelaunayTets(i):
     # np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     # plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
 
-    
-    
-
-    
     return  tets
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -484,7 +474,6 @@ for a in arr:
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
 # filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
-
 
 # points = []
 # N=0
@@ -513,8 +502,6 @@ for a in arr:
 
 print('Number of points = ', N)
 
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Get points before super triangle
 # X1 = [] 
@@ -522,7 +509,6 @@ print('Number of points = ', N)
 # for z in points:
 #     X1.append(z.x) 
 #     Y1.append(z.y)
-
 
 # Calculate SuperTetrahedron
 super_tet = calculateSuperTetrahedron(points) 
@@ -551,9 +537,6 @@ fig = plt.figure()
 axis = fig.add_subplot(111, projection='3d')
 axis.scatter(x1,y1,z1)
 
-
-
-
 # verts =[]
 
 # for t in super_tet.triangles:
@@ -573,15 +556,12 @@ print('Running Delaunay Triangulation')
 # s.paintsphere()
 # print("sphere", s.x,s.y,s.z,s.radius)
 
-
-
 # DelaunayTets(4)
 for i in range(4,N+4):
     # if i<N+2:
     DelaunayTets(i)
     # else: 
     #     tets.append(DelaunayTets(i))
-
 
 count = 0
 for t in tets:
@@ -605,7 +585,6 @@ print('Drawing Voronoi Cells')
 # ys = [points[5].y, points[6].y]
 # zs = [points[5].z, points[6].z]
 # Axes3D.plot(axis, xs, ys,zs,"r")
-
 
 # # Draw Voronoi cells
 # centersX = []
@@ -641,7 +620,6 @@ print('Drawing Voronoi Cells')
 #                         #edge_artist = e1.toArtist()
 #                         #artists.append(edge_artist)
 #                         #plt.gca().add_patch(edge_artist)
-
 
 # # Find Borders
 # x2 = []
@@ -693,14 +671,9 @@ print('Drawing Voronoi Cells')
 #                                             #if number_of_intersections(semi_line, semi_lines) <=2:
 #                                             semi_lines.append(semi_line)
 
-
-
 # # Draw semilines
 # lc = mc.LineCollection(semi_lines, colors = 'r')
 # ax.add_collection(lc)
-
-
-
 
 # Outputs the results in a window
 print('Results:')

@@ -18,14 +18,12 @@ from shapely.geometry import  LineString
 # 6. Repeat until no more points can be added
 # 7. Remove all tetrahedrons that have a point from the super tetrahedron.
 
-# For transforming Delaunay -> 
+# For transforming Delaunay -> Voronoi
 # 1. Find all the circumcenters of the tetrahedrons. These are the voronoi points
 # 2. Connect adjacent tetrahedrons circumcenters with edge.
 # 3. For semilines, find the shared face between a tetrahedron with one that has 
 #    a shared point with the super triangle. Create a semiline starting from the circumcenter of the triangle
 #    perpendicular to the shared triangle.
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points
@@ -94,7 +92,7 @@ class Tetrahedron:
         self.triangles =[t0,t1,t2,t3]
         return True
 
-    #Return the edges of the tetrahedron
+    # Return the edges of the tetrahedron
     def edges(self):
         edges=[]
         for t in self.triangles:
@@ -115,7 +113,7 @@ class Tetrahedron:
         # print("end")              
         return edges
 
-    #Return the points of the tetrahedron
+    # Return the points of the tetrahedron
     def points(self):
         points=[]
         
@@ -134,7 +132,7 @@ class Tetrahedron:
                 # print("added first 2 points", points[0].x,  points[0].y,  points[0].z,  points[1].x,  points[1].y,  points[1].z )
         return points
 
-    #Paint tetrahedron
+    # Paint tetrahedron
     def painttet(self):
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y,p.z]), self.points())))
         verts= [ [points[0], points[1], points[2]],
@@ -507,6 +505,7 @@ for a in arr:
 print('Number of points = ', N)
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Get points before super triangle
 # X1 = [] 
 # Y1 = []
@@ -543,7 +542,6 @@ for p in super_tet.points():
 #     for e in t.points():
 #         print(e.x,e.y,e.z)
 
-
 # verts =[]
 
 # for t in super_tet.triangles:
@@ -563,15 +561,12 @@ print('Running Delaunay Triangulation')
 # s.paintsphere()
 # print("sphere", s.x,s.y,s.z,s.radius)
 
-
-
 # DelaunayTets(4)
 for i in range(4,N+4):
     # if i<N+2:
     DelaunayTets(i)
     # else: 
     #     tets.append(DelaunayTets(i))
-
 
 count = 0
 for t in tets:
@@ -595,7 +590,6 @@ print('Drawing Voronoi Cells')
 # ys = [points[5].y, points[6].y]
 # zs = [points[5].z, points[6].z]
 # Axes3D.plot(axis, xs, ys,zs,"r")
-
 
 # Draw Voronoi cells
 centersX = []
@@ -632,11 +626,10 @@ for tetr in tets:
                         # centersX.append(c1.x)
                         # centersY.append(c1.y)
                         # plt.plot(x,y,'r')
-                        #e1 = Edge([centre1, centre2])
-                        #edge_artist = e1.toArtist()
-                        #artists.append(edge_artist)
-                        #plt.gca().add_patch(edge_artist)
-
+                        # e1 = Edge([centre1, centre2])
+                        # edge_artist = e1.toArtist()
+                        # artists.append(edge_artist)
+                        # plt.gca().add_patch(edge_artist)
 
 # # Find Borders
 # x2 = []
@@ -687,9 +680,6 @@ for tetr in tets:
 #                                         if number_of_intersections(semi_line, v_edges) <= 2:
 #                                             #if number_of_intersections(semi_line, semi_lines) <=2:
 #                                             semi_lines.append(semi_line)
-
-
-
 
 # # Draw semilines
 # lc = mc.LineCollection(semi_lines, colors = 'r')

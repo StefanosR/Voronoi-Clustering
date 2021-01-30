@@ -3,8 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# Info -> Reminder to change opening comments
-
+# Info
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
@@ -16,14 +15,12 @@ import matplotlib.animation as animation
 # 6. Repeat until no more points can be added.
 # 7. Remove all triangles that have a vertex from the super triangle.
 
-# For transforming Delaunay -> 
+# For transforming Delaunay -> Voronoi
 # 1. Find all the circumcenters of the triangles. These are the voronoi points
 # 2. Connect adjacent triangle circumcenters with edge.
 # 3. For semilines, find the shared edge between a triangle with one that has 
 #    a shared point with the super triangle. Create a semiline starting from the circumcenter of the triangle
 #    perpendicular to the shared edge.
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points
@@ -173,7 +170,6 @@ def createTrigFromEdgeAndPoint(edge, point):
 
     return t
 
-
 # Function 5: Whether a triangle contains a vertex from original super-triangle
 def containsVertex(t1, t2):
     for v1 in t1.points():
@@ -186,7 +182,6 @@ def containsVertex(t1, t2):
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
-
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
 filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
 
@@ -215,8 +210,6 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
 
-
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Calculate SuperTriangle
@@ -224,15 +217,14 @@ super_trig = calculateSuperTriangle(points)
 
 trigs = [super_trig]
 
-def init(): # ??????
+def init(): 
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
     return []
 
-# Animation σύμφωνα με τον ψευδοκώδικα Wikipedia
+# Σύμφωνα με τον ψευδοκώδικα Wikipedia:
 def animate(i):
     p = points[i]
-    # Λείπει μια for (περιττή?)
     bad_trigs = []
     for t in trigs:                          # first find all the triangles that are no longer valid due to the insertion
         if pointInsideCircumcircle(p, t):  
@@ -273,7 +265,6 @@ def animate(i):
         plt.gca().add_artist(circ_artist) # Circle drawing
     return artists
 
-# ???
 fig = plt.figure()
 ax = fig.add_subplot(111, aspect='equal')
 
