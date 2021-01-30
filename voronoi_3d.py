@@ -7,7 +7,7 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-# Info 
+# Info
 # Algorithm: Delaunay Tetrahedration
 # Add tetrahedron that envelops all the points in the tetrahedration list
 # 1. Add point
@@ -65,7 +65,7 @@ class Tetrahedron:
     # Initialize a Tetrahedron
     def __init__(self, triangles=[]):
         self.triangles = triangles
-        
+
     # Create tetrahedron from 4 points
     def frompoints(self, pnts=[]):
         points = pnts
