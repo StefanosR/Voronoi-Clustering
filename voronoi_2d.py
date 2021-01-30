@@ -4,23 +4,23 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-# Info -> Reminder to change opening comments
-
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
-# 1. Add point
-# 2. Find all triangles where the new point is in (bad triangles)
-# 3. Find all edges that are between bad triangle and good triangle
-# 4. Construct new triangles with the edges
-# 5. Remove bad triangles
-# 6. Repeat until no more points can be added
-# 7. Remove all triangles that have a vertex from the super triangle
+# 1. Add point.
+# 2. Find all triangles where the new point is in (bad triangles).
+# 3. Find all edges that are between bad triangle and good triangle.
+# 4. Construct new triangles with the edges and the new point.
+# 5. Remove bad triangles.
+# 6. Repeat until no more points can be added.
+# 7. Remove all triangles that have a vertex from the super triangle.
 
-# For transforming Delauney -> Voronoi: (UPDATE HERE)
-# 1. Find all the circumcenters of the tringles
+# For transforming Delaunay -> Voronoi
+# 1. Find all the circumcenters of the triangles. These are the voronoi points
 # 2. Connect adjacent triangle circumcenters with edge.
-
+# 3. For semilines, find the shared edge between a triangle with one that has 
+#    a shared point with the super triangle. Create a semiline starting from the circumcenter of the triangle
+#    perpendicular to the shared edge.
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points
@@ -116,7 +116,7 @@ def calculateSuperTriangle(points):
    
     return t
 
-# Function 2:
+# Function 2: find if point is inside a circle
 def pointInsideCircumcircle(p, t):
     pnts = t.points()
 
@@ -160,8 +160,8 @@ def isSharedEdge(edge, trigs):
 
     return False
 
-# Function 4:
-def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
+# Function 4: check if two trigs are sharing a node
+def isContainPointsFromTrig(t1, t2): 
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
@@ -169,7 +169,7 @@ def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
 
     return False
 
-# Function 5:
+# Function 5: create triangle from an edge and a point
 def createTrigFromEdgeAndPoint(edge, point):
     e1 = Edge([edge.points[0], edge.points[1]])
     e2 = Edge([edge.points[1], point])
@@ -177,18 +177,6 @@ def createTrigFromEdgeAndPoint(edge, point):
     t = Triangle([e1, e2, e3])
 
     return t
-
-# Function 6:
-def checkDelaunay(triangle):
-    for e in triangle.edges:
-        for t in e.trigs:
-            if t == triangle:
-                continue
-            for p in t.points():
-                if pointInsideCircumcircle(p, triangle):
-                    print('Alert')
-    return 1
-
 
 #Find perpedicular line from 2 points
 def perpendicular(point1, point2):
@@ -245,7 +233,7 @@ def number_of_intersections(line, line_table):
     return count
 
 
-# Find Delaunay Triangulation, exactly as in Wiki
+# Find Delaunay Triangulation
 def DelaunayTrigs(i):
     p = points[i]
     bad_trigs = []

@@ -3,23 +3,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-# Info -> Reminder to change opening comments
-
+# Info
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
-# 1. Add point
-# 2. Find all triangles where the new point is in (bad triangles)
-# 3. Find all edges that are between bad triangle and good triangle
-# 4. Construct new triangles with the edges
-# 5. Remove bad triangles
-# 6. Repeat until no more points can be added
-# 7. Remove all triangles that have a vertex from the super triangle
+# 1. Add point.
+# 2. Find all triangles where the new point is in (bad triangles).
+# 3. Find all edges that are between bad triangle and good triangle.
+# 4. Construct new triangles with the edges and the new point.
+# 5. Remove bad triangles.
+# 6. Repeat until no more points can be added.
+# 7. Remove all triangles that have a vertex from the super triangle.
 
-# For transforming Delauney -> Voronoi: (UPDATE HERE)
-# 1. Find all the circumcenters of the tringles
+# For transforming Delaunay -> Voronoi
+# 1. Find all the circumcenters of the triangles. These are the voronoi points
 # 2. Connect adjacent triangle circumcenters with edge.
-
+# 3. For semilines, find the shared edge between a triangle with one that has 
+#    a shared point with the super triangle. Create a semiline starting from the circumcenter of the triangle
+#    perpendicular to the shared edge.
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points
@@ -111,7 +112,7 @@ def calculateSuperTriangle(points):
    
     return t
 
-# Function 2:
+# Function 2: find if point is inside a circle
 def pointInsideCircumcircle(p, t):
     pnts = t.points()
 
@@ -152,56 +153,24 @@ def isSharedEdge(edge, trigs):
 
     return False
 
-# Function 4:
-def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
+# Function 4: check if two trigs are sharing a node
+def isContainPointsFromTrig(t1, t2): 
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
                 return True
     return False
 
-# Function 5:
+# Function 5: create triangle from an edge and a point
 def createTrigFromEdgeAndPoint(edge, point):
     e1 = Edge([edge.points[0], edge.points[1]])
     e2 = Edge([edge.points[1], point])
     e3 = Edge([point, edge.points[0]])
     t = Triangle([e1, e2, e3])
+
     return t
 
-# Function 6:
-def checkDelaunay(triangle):
-    for e in triangle.edges:
-        for t in e.trigs:
-            if t == triangle:
-                continue
-            for p in t.points():
-                if pointInsideCircumcircle(p, triangle):
-                    print('Alert')
-    return 1
-
-# Function 7:
-def calculateCircle(t):
-    pnts = t.points()
-    p1 = [pnts[0].x, pnts[0].y]
-    p2 = [pnts[1].x, pnts[1].y]
-    p3 = [pnts[2].x, pnts[2].y]
-
-    temp = p2[0] * p2[0] + p2[1] * p2[1]
-    bc = (p1[0] * p1[0] + p1[1] * p1[1] - temp) / 2
-    cd = (temp - p3[0] * p3[0] - p3[1] * p3[1]) / 2
-    det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1])
-
-    if abs(det) < 1.0e-6:
-        return (None, np.inf)
-
-    # Center of circle
-    cx = (bc*(p2[1] - p3[1]) - cd*(p1[1] - p2[1])) / det
-    cy = ((p1[0] - p2[0]) * cd - (p2[0] - p3[0]) * bc) / det
-
-    radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
-    return ((cx, cy), radius)
-
-# Function 8: Whether a triangle contains a vertex from original super-triangle
+# Function 5: Whether a triangle contains a vertex from original super-triangle
 def containsVertex(t1, t2):
     for v1 in t1.points():
         for v2 in t2.points():
@@ -213,9 +182,8 @@ def containsVertex(t1, t2):
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Dataset point input
-
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Στέφανος Ρήγας\Desktop\Fast Projects\Voronoi Projects\Voronoi-Clustering\Ski_Areas_NA2.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
 
 points = []
 N=0
@@ -224,9 +192,9 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         separated = line.split(',')
         # The points represented by the coordinates of the dataset are mostly in columns 6 and 7
         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
-        temp1 = float(separated[0])
-        temp2 = float(separated[1])
-        temp = [float(separated[0]), float(separated[1])]
+        temp1 = float(separated[6])
+        temp2 = float(separated[7])
+        temp = [float(separated[6]), float(separated[7])]
         '''
         try:
             temp1 = float(separated[6])
@@ -242,23 +210,6 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
 
-# Manual user input:
-'''
-points = []
-N = int(input()) # Count of points
-for i in range(N):
-    xy = list(map(int, input().split(' ')[:2]))
-    points.append(Point(xy[0], xy[1]))
-'''
-
-# Automatic input (20 random points)
-'''
-N = 20 # Count of points
-points = list(map(lambda p: Point(p[0], p[1]), np.random.rand(N, 2)))
-for p in points:
-    p.x = p.x * 1.5
-'''
-
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Calculate SuperTriangle
@@ -266,15 +217,14 @@ super_trig = calculateSuperTriangle(points)
 
 trigs = [super_trig]
 
-def init(): # ??????
+def init(): 
     np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     plt.scatter(np_points[:, 0], np_points[:, 1], s=15)
     return []
 
-# Animation σύμφωνα με τον ψευδοκώδικα Wikipedia
+# Σύμφωνα με τον ψευδοκώδικα Wikipedia:
 def animate(i):
     p = points[i]
-    # Λείπει μια for (περιττή?)
     bad_trigs = []
     for t in trigs:                          # first find all the triangles that are no longer valid due to the insertion
         if pointInsideCircumcircle(p, t):  
@@ -315,7 +265,6 @@ def animate(i):
         plt.gca().add_artist(circ_artist) # Circle drawing
     return artists
 
-# ???
 fig = plt.figure()
 ax = fig.add_subplot(111, aspect='equal')
 

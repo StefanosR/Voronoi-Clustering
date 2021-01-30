@@ -7,7 +7,7 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-# Info
+# Info 
 # Algorithm: Delaunay Tetrahedration
 # Add tetrahedron that envelops all the points in the tetrahedration list
 # 1. Add point
@@ -18,7 +18,7 @@ from shapely.geometry import  LineString
 # 6. Repeat until no more points can be added
 # 7. Remove all tetrahedrons that have a point from the super tetrahedron.
 
-# For transforming Delaunay -> Voronoi
+# For transforming Delaunay -> 
 # 1. Find all the circumcenters of the tetrahedrons. These are the voronoi points
 # 2. Connect adjacent tetrahedrons circumcenters with edge.
 # 3. For semilines, find the shared face between a tetrahedron with one that has 
@@ -112,7 +112,7 @@ class Tetrahedron:
         #     print("printing points of edges() point 1:", ed.points[0].x,ed.points[0].y,ed.points[0].z, " point 2:",ed.points[1].x,ed.points[1].y, ed.points[1].z) 
         # print("end")              
         return edges
-
+    
     # Return the points of the tetrahedron
     def points(self):
         points=[]
@@ -154,7 +154,7 @@ class Sphere:
     def fromTetrahedron(self, tet):
         pnts = tet.points()
         # for p in pnts:
-        # print("Point:",p.x, p.y, p.z)
+        #     print("Point:",p.x, p.y, p.z)
         
         p1 = [pnts[0].x, pnts[0].y, pnts[0].z]
         p2 = [pnts[1].x, pnts[1].y, pnts[1].z]
@@ -237,42 +237,42 @@ class Sphere:
         # return True
 
 
-# Function 1: Calculates the super tetrahedron
+# Function 1: Calculates the super triangle
 def calculateSuperTetrahedron(points):
     # Find boundary box that contain all points
-    p_min = Point(min(points, key=lambda p: p.x).x - 0.1,
-                  min(points, key=lambda p: p.y).y - 0.1,
-                  min(points, key=lambda p: p.z).z - 0.1,)
-    p_max = Point(max(points, key=lambda p: p.x).x + 0.1,
-                  max(points, key=lambda p: p.y).y + 0.1,
-                  max(points, key=lambda p: p.z).z + 0.1)
+    # p_min = Point(min(points, key=lambda p: p.x).x - 0.1,
+    #               min(points, key=lambda p: p.y).y - 0.1,
+    #               min(points, key=lambda p: p.z).z - 0.1,)
+    # p_max = Point(max(points, key=lambda p: p.x).x + 0.1,
+    #               max(points, key=lambda p: p.y).y + 0.1,
+    #               max(points, key=lambda p: p.z).z + 0.1)
 
-    a = p_max.x - p_min.x  # "distance" between max and min points
-    b = p_max.y - p_min.y
-    c = p_max.z - p_min.z
+    # a = p_max.x - p_min.x  # "distance" between max and min points
+    # b = p_max.y - p_min.y
+    # c = p_max.z - p_min.z
 
-    d = 2*max(a,b,c)
     # # p1 = Point(p_min.x - a, p_min.y - b, p_min.z - c)
     # # p2 = Point(p_min.x, p_max.y + b, p_min.z)
     # # p3 = Point(p_min.x, p_min.y, p_max.z + c)
     # # p4 = Point(p_max.x + a, p_min.y, p_min.z)
 
-    p1 = Point(0,0, d)
-    p2 = Point(-d,-d, -d)
-    p3 = Point(d,-d, -d)
-    p4 = Point(0,d, -d)
+    p1 = Point(0,0, 250)
+    p2 = Point(-250,-250, -250)
+    p3 = Point(250,-250, -250)
+    p4 = Point(0,250, -250)
 
     points.insert(0, p1)
     points.insert(0, p2)
     points.insert(0, p3)
     points.insert(0, p4)
+
     
     t = Tetrahedron()
     t.frompoints([p1,p2,p3,p4])
 
     return t
 
-# Function 2: Find if a point is inside a sphere
+# Function 2:
 def pointInsideSphere(p, tet):
     
     s = Sphere()
@@ -314,7 +314,7 @@ def pointInsideSphere(p, tet):
     # ) > 0
     return distance < s.radius
 
-# Function 3: Finds if a certain triangle is shared with any tetrahedron
+# Function 3: Finds if a certain edge is shared with any triangle
 def isSharedTrig(trig, tets, current_tet):
     shared_tets = []
     for tet in tets:
@@ -355,15 +355,15 @@ def isSharedTrig(trig, tets, current_tet):
             if flag:
                 shared_tets.append(tet)
                 return True , shared_tets   
-
     return False 
 
 # Function 4: check if two tetrahedrons are sharing a node
-def isContainPointsFromTet(t1, t2): 
+def isContainPointsFromTet(t1, t2): # check if two trigs are sharing a node
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y and p1.z == p2.z:
                 return True
+
     return False
 
 # Function 5: Create tetrahedron from a triangle and a point
@@ -432,7 +432,7 @@ def number_of_intersections(line, line_table):
 
     return count
 
-# Find Delaunay Tetrahedrations
+# Find Delaunay Triangulation
 def DelaunayTets(i):
     print("LOOP:", i)
     p = points[i]
@@ -460,7 +460,7 @@ def DelaunayTets(i):
     # Draw points
     # np_points = np.array(list(map(lambda p: np.asarray([p.x, p.y]), points)))
     # plt.scatter(np_points[3:, 0], np_points[3:, 1], s=15)
-      
+
     return  tets
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -472,9 +472,8 @@ for a in arr:
     points.append(Point(a[0],a[1],a[2]))
     N= N+1
 
-# # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-# filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50 - 3D.csv' 
-
+# Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
+# filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
 
 # points = []
 # N=0
@@ -485,8 +484,7 @@ for a in arr:
 #         # In some cases those coordinates are in columns 7 and 8, so we catch these exceptions
 #         temp1 = float(separated[6])
 #         temp2 = float(separated[7])
-#         temp3 = float(separated[14])
-#         temp = [float(separated[6]), float(separated[7]), float(separated[14])]
+#         temp = [float(separated[6]), float(separated[7])]
 #         '''
 #         try:
 #             temp1 = float(separated[5])
@@ -500,32 +498,17 @@ for a in arr:
 #         N = N+1    # Number of points required for the plot/animation
 #         #print(temp)     # Prints our point coordinates in the output console  
 #         # Appends the scanned points into the point array as data of the Point Class
-#         points.append(Point(temp1,temp2,temp3))
+#         points.append(Point(temp1,temp2))
 
 print('Number of points = ', N)
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 # Get points before super triangle
 # X1 = [] 
 # Y1 = []
 # for z in points:
 #     X1.append(z.x) 
 #     Y1.append(z.y)
-
-
-# Draw points
-x1 = []
-y1 = []
-z1 = []
-for p in points:
-    x1.append(p.x)
-    y1.append(p.y)
-    z1.append(p.z)
-    
-fig = plt.figure()
-axis = fig.add_subplot(111, projection='3d')
-axis.scatter(x1,y1,z1)
 
 # Calculate SuperTetrahedron
 super_tet = calculateSuperTetrahedron(points) 
@@ -536,11 +519,23 @@ for p in super_tet.points():
     stpoints.append(p)
     # print("Printing at end",p.x, p.y, p.z)
  
-
 # for t in super_tet.triangles:
 #     print("\n")
 #     for e in t.points():
 #         print(e.x,e.y,e.z)
+
+# Draw points
+x1 = []
+y1 = []
+z1 = []
+for p in points:
+    x1.append(p.x)
+    y1.append(p.y)
+    z1.append(p.z)
+
+fig = plt.figure()
+axis = fig.add_subplot(111, projection='3d')
+axis.scatter(x1,y1,z1)
 
 # verts =[]
 
@@ -571,7 +566,7 @@ for i in range(4,N+4):
 count = 0
 for t in tets:
     count+=1
-    # t.painttet()
+    t.painttet()
     # print("new tet")
     # for p in t.points():
     #     print("x=:",p.x, "y=:",p.y, "z=", p.z)
@@ -591,45 +586,40 @@ print('Drawing Voronoi Cells')
 # zs = [points[5].z, points[6].z]
 # Axes3D.plot(axis, xs, ys,zs,"r")
 
-# Draw Voronoi cells
-centersX = []
-centersY=[]
-centersZ=[]
-v_edges = []
-v_trigs = []
-count15=0
-for tetr in tets:
-# for j in range(0,1):
-#     tetr=tets[j]
-    count15+=1
-    print(count15)
-    flag3 = isContainPointsFromTet(tetr,super_tet)
-    if  not flag3:
-        for trig in tetr.triangles:
-            flag , shared_tet = isSharedTrig(trig, tets, tetr)
-            if flag:
-                for tetr2 in shared_tet:
-                    flag2 = isContainPointsFromTet(tetr2,super_tet)
-                    if not flag2 and tetr!=tetr2:
-                        c1 = Sphere()
-                        c2 = Sphere()
-                        c1.fromTetrahedron(tetr)
-                        c2.fromTetrahedron(tetr2)
-                        current_v_edge = [(c1.x , c1.y, c1.z),(c2.x, c2.y, c2.z)]
-                        v_edges.append(current_v_edge)
-                        xs = [c1.x, c2.x]
-                        ys = [c1.y, c2.y]
-                        zs = [c1.z, c2.z]
-                        Axes3D.plot(axis, xs, ys,zs,"r")
-                        # x = [c1.x, c2.x]
-                        # y = [c1.y, c2.y]
-                        # centersX.append(c1.x)
-                        # centersY.append(c1.y)
-                        # plt.plot(x,y,'r')
-                        # e1 = Edge([centre1, centre2])
-                        # edge_artist = e1.toArtist()
-                        # artists.append(edge_artist)
-                        # plt.gca().add_patch(edge_artist)
+# # Draw Voronoi cells
+# centersX = []
+# centersY=[]
+# centersZ=[]
+# v_edges = []
+# v_trigs = []
+# for tetr in tets:
+#     flag3 = isContainPointsFromTet(tetr,super_tet)
+#     if  not flag3:
+#         for trig in tetr.triangles:
+#             flag , shared_tet = isSharedTrig(trig, tets, tetr)
+#             if flag:
+#                 for tetr2 in shared_tet:
+#                     flag2 = isContainPointsFromTet(tetr2,super_tet)
+#                     if not flag2 and tetr!=tetr2:
+#                         c1 = Sphere()
+#                         c2 = Sphere()
+#                         c1.fromTetrahedron(tetr)
+#                         c2.fromTetrahedron(tetr2)
+#                         current_v_edge = [(c1.x , c1.y, c1.z),(c2.x, c2.y, c2.z)]
+#                         v_edges.append(current_v_edge)
+#                         xs = [c1.x, c2.x]
+#                         ys = [c1.y, c2.y]
+#                         zs = [c1.z, c2.z]
+#                         Axes3D.plot(axis, xs, ys,zs,"r")
+#                         # x = [c1.x, c2.x]
+#                         # y = [c1.y, c2.y]
+#                         # centersX.append(c1.x)
+#                         # centersY.append(c1.y)
+#                         # plt.plot(x,y,'r')
+#                         #e1 = Edge([centre1, centre2])
+#                         #edge_artist = e1.toArtist()
+#                         #artists.append(edge_artist)
+#                         #plt.gca().add_patch(edge_artist)
 
 # # Find Borders
 # x2 = []
