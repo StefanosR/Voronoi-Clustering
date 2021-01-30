@@ -4,23 +4,23 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-# Info -> Reminder to fix the steps below (mitsakos)
-
 # Algorithm: Delaunay Triangulation
 # List triangulation
 # Add triangle that envelops all the points in the triangulation list
-# 1. Add point
-# 2. Find all triangles where the new point is in (bad triangles)
-# 3. Find all edges that are between bad triangle and good triangle
-# 4. Construct new triangles with the edges
-# 5. Remove bad triangles
-# 6. Repeat until no more points can be added
-# 7. Remove all triangles that have a vertex from the super triangle
+# 1. Add point.
+# 2. Find all triangles where the new point is in (bad triangles).
+# 3. Find all edges that are between bad triangle and good triangle.
+# 4. Construct new triangles with the edges and the new point.
+# 5. Remove bad triangles.
+# 6. Repeat until no more points can be added.
+# 7. Remove all triangles that have a vertex from the super triangle.
 
-# For transforming Delauney -> Voronoi: (UPDATE HERE)
-# 1. Find all the circumcenters of the tringles
+# For transforming Delaunay -> 
+# 1. Find all the circumcenters of the triangles. These are the voronoi points
 # 2. Connect adjacent triangle circumcenters with edge.
-
+# 3. For semilines, find the shared edge between a triangle with one that has 
+#    a shared point with the super triangle. Create a semiline starting from the circumcenter of the triangle
+#    perpendicular to the shared edge.
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Imported data will be assigned here as points

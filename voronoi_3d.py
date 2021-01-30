@@ -7,22 +7,24 @@ import matplotlib.animation as animation
 from matplotlib import collections as mc
 from shapely.geometry import  LineString
 
-# Info -> Reminder to change opening comments
-
-# Algorithm: Delaunay Triangulation
-# List triangulation
-# Add triangle that envelops all the points in the triangulation list
+# Info 
+# Algorithm: Delaunay Tetrahedration
+# Add tetrahedron that envelops all the points in the tetrahedration list
 # 1. Add point
-# 2. Find all triangles where the new point is in (bad triangles)
-# 3. Find all edges that are between bad triangle and good triangle
-# 4. Construct new triangles with the edges
-# 5. Remove bad triangles
+# 2. Find all tetrahedrons in whose circumsphere the new point is in (bad tetrahedrons).
+# 3. Find all triangles (faces) that are between bad tetrahedrons and good tetrahedrons.
+# 4. Construct new tetrahedrons with the triangles and the new point.
+# 5. Remove bad tetrahedrons.
 # 6. Repeat until no more points can be added
-# 7. Remove all triangles that have a vertex from the super triangle
+# 7. Remove all tetrahedrons that have a point from the super tetrahedron.
 
-# For transforming Delauney -> Voronoi: (UPDATE HERE)
-# 1. Find all the circumcenters of the tringles
-# 2. Connect adjacent triangle circumcenters with edge.
+# For transforming Delaunay -> 
+# 1. Find all the circumcenters of the tetrahedrons. These are the voronoi points
+# 2. Connect adjacent tetrahedrons circumcenters with edge.
+# 3. For semilines, find the shared face between a tetrahedron with one that has 
+#    a shared point with the super triangle. Create a semiline starting from the circumcenter of the triangle
+#    perpendicular to the shared triangle.
+
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
