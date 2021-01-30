@@ -660,14 +660,14 @@ for tetr in tets:
 # # Draw Voronoi semilines
 # print('Drawing Voronoi Semi-lines')
 # semi_lines= []
-# for t in trigs:
-#     flag3 = isContainPointsFromTrig(t,super_trig)
+# for t in tets:
+#     flag3 = isContainPointsFromTet(tetr,super_tet)
 #     if not flag3:
-#         for e in t.edges:
-#             flag , vtrigs = isSharedEdge(e, trigs)
+#         for trig in tetr.triangles:
+#             flag , shared_tet = isSharedTrig(trig, tets, tetr)
 #             if flag:
-#                 for t2 in vtrigs:
-#                     flag2 = isContainPointsFromTrig(t2,super_trig)
+#                 for tetr2 in shared_tet:
+#                     flag2 = isContainPointsFromTet(tetr2,super_tet)
 #                     if flag2 and t2!=t:
 #                         p = perpendicular(e.points[0],e.points[1])
 #                         for b in boundaries:
@@ -681,6 +681,7 @@ for tetr in tets:
 #                                         if number_of_intersections(semi_line, v_edges) <= 2:
 #                                             #if number_of_intersections(semi_line, semi_lines) <=2:
 #                                             semi_lines.append(semi_line)
+
 
 
 
