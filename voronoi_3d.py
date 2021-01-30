@@ -62,9 +62,11 @@ class Triangle:
 
 # Describes the Tetrahedron class
 class Tetrahedron:
+    # Initialize a Tetrahedron
     def __init__(self, triangles=[]):
         self.triangles = triangles
-
+        
+    # Create tetrahedron from 4 points
     def frompoints(self, pnts=[]):
         points = pnts
         p1 = points[0]
@@ -92,7 +94,7 @@ class Tetrahedron:
         self.triangles =[t0,t1,t2,t3]
         return True
 
-
+    #Return the edges of the tetrahedron
     def edges(self):
         edges=[]
         for t in self.triangles:
@@ -112,7 +114,8 @@ class Tetrahedron:
         #     print("printing points of edges() point 1:", ed.points[0].x,ed.points[0].y,ed.points[0].z, " point 2:",ed.points[1].x,ed.points[1].y, ed.points[1].z) 
         # print("end")              
         return edges
-    
+
+    #Return the points of the tetrahedron
     def points(self):
         points=[]
         
@@ -131,6 +134,7 @@ class Tetrahedron:
                 # print("added first 2 points", points[0].x,  points[0].y,  points[0].z,  points[1].x,  points[1].y,  points[1].z )
         return points
 
+    #Paint tetrahedron
     def painttet(self):
         points = np.array(list(map(lambda p: np.asarray([p.x, p.y,p.z]), self.points())))
         verts= [ [points[0], points[1], points[2]],
@@ -270,7 +274,7 @@ def calculateSuperTetrahedron(points):
 
     return t
 
-# Function 2:
+# Function 2: Find if a point is inside a sphere
 def pointInsideSphere(p, tet):
     
     s = Sphere()
@@ -312,7 +316,7 @@ def pointInsideSphere(p, tet):
     # ) > 0
     return distance < s.radius
 
-# Function 3: Finds if a certain edge is shared with any triangle
+# Function 3: Finds if a certain triangle is shared with any tetrahedron
 def isSharedTrig(trig, tets, current_tet):
     shared_tets = []
     for tet in tets:
@@ -356,15 +360,15 @@ def isSharedTrig(trig, tets, current_tet):
 
     return False 
 
-# Function 4:
-def isContainPointsFromTet(t1, t2): # check if two tets are sharing a node
+# Function 4: check if two tetrahedrons are sharing a node
+def isContainPointsFromTet(t1, t2): 
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y and p1.z == p2.z:
                 return True
     return False
 
-# Function 5:
+# Function 5: Create tetrahedron from a triangle and a point
 def createTetFromTrigAndPoint(trig, p):
     tpoints = trig.points()
     p1 = tpoints[0]
@@ -430,7 +434,7 @@ def number_of_intersections(line, line_table):
 
     return count
 
-# Find Delaunay Triangulation, exactly as in Wiki
+# Find Delaunay Tetrahedrations
 def DelaunayTets(i):
     print("LOOP:", i)
     p = points[i]

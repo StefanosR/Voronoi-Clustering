@@ -115,7 +115,7 @@ def calculateSuperTriangle(points):
    
     return t
 
-# Function 2:
+# Function 2: find if point is inside a circle
 def pointInsideCircumcircle(p, t):
     pnts = t.points()
 
@@ -156,15 +156,15 @@ def isSharedEdge(edge, trigs):
 
     return False
 
-# Function 4:
-def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
+# Function 4: check if two trigs are sharing a node
+def isContainPointsFromTrig(t1, t2): 
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
                 return True
     return False
 
-# Function 5:
+# Function 5: create triangle from an edge and a point
 def createTrigFromEdgeAndPoint(edge, point):
     e1 = Edge([edge.points[0], edge.points[1]])
     e2 = Edge([edge.points[1], point])
@@ -173,29 +173,8 @@ def createTrigFromEdgeAndPoint(edge, point):
 
     return t
 
-# Function 6:
-def calculateCircle(t):
-    pnts = t.points()
-    p1 = [pnts[0].x, pnts[0].y]
-    p2 = [pnts[1].x, pnts[1].y]
-    p3 = [pnts[2].x, pnts[2].y]
 
-    temp = p2[0] * p2[0] + p2[1] * p2[1]
-    bc = (p1[0] * p1[0] + p1[1] * p1[1] - temp) / 2
-    cd = (temp - p3[0] * p3[0] - p3[1] * p3[1]) / 2
-    det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1])
-
-    if abs(det) < 1.0e-6:
-        return (None, np.inf)
-
-    # Center of circle
-    cx = (bc*(p2[1] - p3[1]) - cd*(p1[1] - p2[1])) / det
-    cy = ((p1[0] - p2[0]) * cd - (p2[0] - p3[0]) * bc) / det
-
-    radius = np.sqrt((cx - p1[0])**2 + (cy - p1[1])**2)
-    return ((cx, cy), radius)
-
-# Function 7: Whether a triangle contains a vertex from original super-triangle
+# Function 5: Whether a triangle contains a vertex from original super-triangle
 def containsVertex(t1, t2):
     for v1 in t1.points():
         for v2 in t2.points():
@@ -209,7 +188,7 @@ def containsVertex(t1, t2):
 # Dataset point input
 
 # Copy path of Ski_Areas_NA.csv to paste below (the data can be manipulated manually to change the grid)
-filename = r'C:\Users\Στέφανος Ρήγας\Desktop\Fast Projects\Voronoi Projects\Voronoi-Clustering\airports - 10.csv' 
+filename = r'C:\Users\Dimitris\Documents\GitHub\Voronoi-Clustering\airports - 50.csv' 
 
 points = []
 N=0
@@ -236,22 +215,7 @@ with open(filename, 'r', encoding='utf8') as csvfile:
         # Appends the scanned points into the point array as data of the Point Class
         points.append(Point(temp1,temp2))
 
-# Manual user input:
-'''
-points = []
-N = int(input()) # Count of points
-for i in range(N):
-    xy = list(map(int, input().split(' ')[:2]))
-    points.append(Point(xy[0], xy[1]))
-'''
 
-# Automatic input (20 random points)
-'''
-N = 20 # Count of points
-points = list(map(lambda p: Point(p[0], p[1]), np.random.rand(N, 2)))
-for p in points:
-    p.x = p.x * 1.5
-'''
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

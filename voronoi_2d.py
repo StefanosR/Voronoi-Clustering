@@ -116,7 +116,7 @@ def calculateSuperTriangle(points):
    
     return t
 
-# Function 2:
+# Function 2: find if point is inside a circle
 def pointInsideCircumcircle(p, t):
     pnts = t.points()
 
@@ -160,8 +160,8 @@ def isSharedEdge(edge, trigs):
 
     return False
 
-# Function 4:
-def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
+# Function 4: check if two trigs are sharing a node
+def isContainPointsFromTrig(t1, t2): 
     for p1 in t1.points():
         for p2 in t2.points():
             if p1.x == p2.x and p1.y == p2.y:
@@ -169,7 +169,7 @@ def isContainPointsFromTrig(t1, t2): # check if two trigs are sharing a node
 
     return False
 
-# Function 5:
+# Function 5: create triangle from an edge and a point
 def createTrigFromEdgeAndPoint(edge, point):
     e1 = Edge([edge.points[0], edge.points[1]])
     e2 = Edge([edge.points[1], point])
@@ -233,7 +233,7 @@ def number_of_intersections(line, line_table):
     return count
 
 
-# Find Delaunay Triangulation, exactly as in Wiki
+# Find Delaunay Triangulation
 def DelaunayTrigs(i):
     p = points[i]
     bad_trigs = []
