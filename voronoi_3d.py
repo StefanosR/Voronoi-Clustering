@@ -414,12 +414,12 @@ def intersection(line1, line2):
 
     return x0, y0
 
-# Check if point is inside boundaries
-def in_boundaries(this_point):
-    if b2 <= this_point[0] <= b1:
-        if b4 <= this_point[1] <= b3:
-            return True
-    return False
+# # Check if point is inside boundaries
+# def in_boundaries(this_point):
+#     if b2 <= this_point[0] <= b1:
+#         if b4 <= this_point[1] <= b3:
+#             return True
+#     return False
 
 # Number of intersections of a line with any edge
 def number_of_intersections(line, line_table):
